@@ -2,6 +2,8 @@ import { useSession } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 
 import { Layout } from './components';
+import { Accounts } from './components';
+
 import { supabase } from './lib/initSupabase';
 
 function App() {
@@ -13,7 +15,9 @@ function App() {
 
   return (
     <Layout>
-      <div className='border-2 border-red-500'>Hello World</div>
+      <div className='border-2 border-red-500'>
+        <Accounts />
+      </div>
     </Layout>
   );
 }
