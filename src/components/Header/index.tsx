@@ -1,5 +1,5 @@
+import useProfile from '../../hooks/useProfile';
 import { supabase } from '../../lib/initSupabase';
-import useProfile from '../hooks/useProfile';
 
 export default function Header() {
   const { firstName, lastName } = useProfile();

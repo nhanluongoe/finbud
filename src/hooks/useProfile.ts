@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/initSupabase';
+import { supabase } from '../lib/initSupabase';
 
 async function getCurrentProfile() {
   const session = await supabase.auth.getSession();
