@@ -12,7 +12,7 @@ export interface Database {
         };
         Insert: {
           balance?: number | null;
-          id: number;
+          id?: number;
           name?: string | null;
           user_id: string;
         };
