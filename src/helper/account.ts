@@ -27,3 +27,17 @@ export async function deleteAccount(account: Account['Update']) {
   return await supabase.from('accounts').delete().eq('id', account.id);
 }
 
+export async function updateAccount(account: Account['Update']) {
+  // TODO: check if there's any transactions attached to it
+  // if (accounts.data?.length !== 0) {
+  //   throw new Error('Account have gotten transactions attached to it!');
+  // }
+
+  return await supabase
+    .from('accounts')
+    .update({
+      name: account.name,
+      balance: account.balance,
+    })
+    .eq('id', account.id);
+}

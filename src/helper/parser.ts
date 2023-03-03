@@ -5,3 +5,15 @@ export function parseAccountParams(params: string) {
 
   return { name, balance };
 }
+
+export function parseParams(paramString: string) {
+  const params = paramString.split('&');
+  const res: Record<string, string> = {};
+
+  for (const param of params) {
+    const [key, value] = param.split('=');
+    res[key] = value;
+  }
+
+  return res;
+}

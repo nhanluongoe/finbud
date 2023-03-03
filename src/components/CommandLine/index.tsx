@@ -19,6 +19,13 @@ export default function CommandLine() {
     },
   });
 
+  const updateAccountMutation = useMutation({
+    mutationFn: updateAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['accounts'], { exact: true });
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -27,7 +34,6 @@ export default function CommandLine() {
     };
 
     const inputSplits = eventTarget.command.value.split(' ');
-
     const command = inputSplits[0];
     const target = inputSplits[1];
     const params = inputSplits[2];
@@ -57,6 +63,29 @@ export default function CommandLine() {
         }
         break;
       }
+
+      case 'update' || 'u': {
+        const target = inputSplits[1];
+        const targetId = inputSplits[2];
+        const params = inputSplits.slice(3).join(' ');
+
+        switch (target) {
+          case 'account': {
+            const { name, balance } = parseParams(params);
+            updateAccountMutation.mutate({
+              id: +targetId,
+              name,
+              balance: +balance,
+            });
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+        break;
+      }
+
       default:
         break;
     }
