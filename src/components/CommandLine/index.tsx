@@ -39,12 +39,12 @@ export default function CommandLine() {
     switch (command.toLowerCase()) {
       case 'create': {
         const target = inputSplits[1];
-        const params = inputSplits[2];
+        const params = inputSplits.slice(2).join(' ');
 
         switch (target) {
           case 'account': {
-            const { name, balance } = parseAccountParams(params);
-            addAccountMutation.mutate({ name, balance });
+            const { name, balance } = parseParams(params);
+            addAccountMutation.mutate({ name, balance: +balance });
             break;
           }
           default:
