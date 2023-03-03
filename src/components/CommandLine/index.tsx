@@ -1,8 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { parseAccountParams, parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
+import { useRef } from 'react';
+import useEventListener from '../../hooks/useEventLister';
 
 export default function CommandLine() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const queryClient = useQueryClient();
 
   const addAccountMutation = useMutation({
@@ -93,12 +97,44 @@ export default function CommandLine() {
       default:
         break;
     }
+
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+
+    hideInput();
   };
+
+  const hideInput = () => {
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  };
+
+  const focusInput = (e: any) => {
+    const isInputActive = inputRef.current === document.activeElement;
+
+    if (e.key === 'Escape') {
+      hideInput();
+    }
+
+    if (!isInputActive && inputRef.current) {
+      switch (e.key) {
+        case ':': {
+          inputRef.current.value = '';
+          inputRef.current.focus();
+          break;
+        }
+      }
+    }
+  };
+
+  useEventListener('keyup', focusInput);
 
   return (
     <div className='my-2 border-red-500 border'>
       <form onSubmit={handleSubmit}>
-        <input className='w-full block' name='command'></input>
+        <input className='w-full block' name='command' ref={inputRef}></input>
       </form>
     </div>
   );
