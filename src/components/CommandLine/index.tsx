@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { supabase } from '../../lib/initSupabase';
-import { Account } from '../../types';
+import { Account, Command, Target } from '../../types';
 
 async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {
   const session = await supabase.auth.getSession();
@@ -31,21 +31,36 @@ export default function CommandLine() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const target = e.target as typeof e.target & {
+    const eventTarget = e.target as typeof e.target & {
       command: { value: string };
     };
 
-    const command = target.command.value;
+    const inputSplits = eventTarget.command.value.toLowerCase().split(' ');
 
-    const accountName = command.split(' ')[1];
-    const accountBalance = +command.split(' ')[2];
+    const command = inputSplits[0];
+    const target = inputSplits[1];
+    const params = inputSplits[2];
 
-    addAccountMutation.mutate({
-      name: accountName,
-      balance: accountBalance,
-    });
+    switch (command) {
+      case 'create': {
+        switch (target) {
+          case 'account': {
+            const paramSplits = params.split('&');
+            console.log(paramSplits);
+            const name = paramSplits[0];
+            const balance = +paramSplits[1];
 
-    console.log(target.command);
+            addAccountMutation.mutate({ name, balance });
+            break;
+          }
+          default:
+            break;
+        }
+        break;
+      }
+      default:
+        break;
+    }
   };
 
   return (
