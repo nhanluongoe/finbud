@@ -35,11 +35,12 @@ export default function CommandLine() {
 
     const inputSplits = eventTarget.command.value.split(' ');
     const command = inputSplits[0];
-    const target = inputSplits[1];
-    const params = inputSplits[2];
 
     switch (command.toLowerCase()) {
       case 'create': {
+        const target = inputSplits[1];
+        const params = inputSplits[2];
+
         switch (target) {
           case 'account': {
             const { name, balance } = parseAccountParams(params);
@@ -51,11 +52,14 @@ export default function CommandLine() {
         }
         break;
       }
+
       case 'delete': {
+        const target = inputSplits[1];
+        const targetId = inputSplits[2];
+
         switch (target.toLowerCase()) {
           case 'account': {
-            const { name } = parseAccountParams(params);
-            deleteAccountMutation.mutate({ name });
+            deleteAccountMutation.mutate({ id: +targetId });
             break;
           }
           default:
@@ -94,7 +98,7 @@ export default function CommandLine() {
   return (
     <div className='my-2 border-red-500 border'>
       <form onSubmit={handleSubmit}>
-        <input name='command'></input>
+        <input className='w-full block' name='command'></input>
       </form>
     </div>
   );
