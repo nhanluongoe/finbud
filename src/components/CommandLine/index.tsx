@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { parseAccountParams } from '../../helper/parser';
-import { addAccount, deleteAccount } from '../Accounts/helper';
+import { parseAccountParams, parseParams } from '../../helper/parser';
+import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 
 export default function CommandLine() {
   const queryClient = useQueryClient();
