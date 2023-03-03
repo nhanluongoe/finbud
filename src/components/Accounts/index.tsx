@@ -36,7 +36,7 @@ function Account(props: IAccountProps) {
   return (
     <div>
       <p>
-        {account.name} - {account.balance}
+        {account.id} - {account.name} - {account.balance}
       </p>
     </div>
   );
