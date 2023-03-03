@@ -36,8 +36,8 @@ export async function updateAccount(account: Account['Update']) {
   return await supabase
     .from('accounts')
     .update({
-      name: account.name,
-      balance: account.balance,
+      name: account.name ?? undefined,
+      balance: account.balance ?? undefined,
     })
     .eq('id', account.id);
 }
