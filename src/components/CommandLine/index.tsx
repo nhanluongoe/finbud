@@ -43,7 +43,7 @@ export default function CommandLine() {
 
         switch (target) {
           case 'account': {
-            const { name, balance } = parseParams(params);
+            const { name, balance = 0 } = parseParams(params);
             addAccountMutation.mutate({ name, balance: +balance });
             break;
           }
@@ -79,7 +79,7 @@ export default function CommandLine() {
             updateAccountMutation.mutate({
               id: +targetId,
               name,
-              balance: +balance,
+              balance: balance === undefined ? balance : +balance,
             });
             break;
           }
