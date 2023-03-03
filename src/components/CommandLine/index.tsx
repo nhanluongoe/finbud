@@ -53,13 +53,13 @@ export default function CommandLine() {
       command: { value: string };
     };
 
-    const inputSplits = eventTarget.command.value.toLowerCase().split(' ');
+    const inputSplits = eventTarget.command.value.split(' ');
 
     const command = inputSplits[0];
     const target = inputSplits[1];
     const params = inputSplits[2];
 
-    switch (command) {
+    switch (command.toLowerCase()) {
       case 'create': {
         switch (target) {
           case 'account': {
@@ -73,9 +73,9 @@ export default function CommandLine() {
         break;
       }
       case 'delete': {
-        switch (target) {
+        switch (target.toLowerCase()) {
           case 'account': {
-            const { name, balance } = parseAccountParams(params);
+            const { name } = parseAccountParams(params);
             deleteAccountMutation.mutate({ name });
             break;
           }
