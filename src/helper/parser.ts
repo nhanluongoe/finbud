@@ -8,7 +8,7 @@ export function parseAccountParams(params: string) {
 
 export function parseParams(paramString: string) {
   const params = paramString.split('&');
-  const res: Record<string, string> = {};
+  const res: Record<string, string | undefined> = {};
 
   for (const param of params) {
     const [key, value] = param.split('=');
