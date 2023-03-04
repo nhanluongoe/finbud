@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchAccounts } from '../../helper/account';
-import { Database } from '../../lib/schema';
 
 export default function Accounts() {
   const { data } = useQuery({
@@ -13,31 +12,29 @@ export default function Accounts() {
   if (!data) return null;
 
   return (
-    <section>
-      <p>Accounts</p>
-      <div>
-        {data.map((account) => (
-          <Account key={account.id} account={account} />
-        ))}
-      </div>
+    <section className='card'>
+      <h1>Accounts</h1>
+      <table className='table-auto w-full'>
+        <thead className='text-left uppercase bg-gray-200 text-text-secondary rounded-md mb-2 text-sm'>
+          <tr>
+            <th className='pl-3 rounded-l-md'>Id</th>
+            <th>Name</th>
+            <th className='pr-3 rounded-r-md'>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((account, index) => (
+            <tr
+              key={account.id}
+              // className={`${index % 2 === 0 ? '' : 'bg-slate-100'} text-text-secondary`}
+            >
+              <td className='pl-3'>{account.id}</td>
+              <td>{account.name}</td>
+              <td className='pr-3'>{account.balance}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </section>
-  );
-}
-
-type Account = Database['public']['Tables']['accounts']['Row'];
-
-interface IAccountProps {
-  account: Account;
-}
-
-function Account(props: IAccountProps) {
-  const { account } = props;
-
-  return (
-    <div>
-      <p>
-        {account.id} - {account.name} - {account.balance}
-      </p>
-    </div>
   );
 }

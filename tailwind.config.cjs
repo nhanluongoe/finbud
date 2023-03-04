@@ -7,7 +7,11 @@ module.exports = {
     extend: {
       colors: {
         backdrop: 'rgba(28,33,40,0.8)',
-        canvas: colors.amber,
+        canvas: colors.neutral,
+        text: {
+          primary: colors.neutral['900'],
+          secondary: colors.neutral['600'],
+        },
       },
     },
   },

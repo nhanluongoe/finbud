@@ -9,6 +9,16 @@
 
   body {
     min-height: 100vh;
-    @apply bg-canvas-50;
+    @apply bg-canvas-100 font-mono;
+  }
+
+  h1 {
+    @apply text-xl mb-2;
+  }
+}
+
+@layer components {
+  .card {
+    @apply p-4 bg-canvas-50 rounded-md m-2 shadow-canvas-300 drop-shadow-sm;
   }
 }
