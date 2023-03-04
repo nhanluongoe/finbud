@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { parseAccountParams, parseParams } from '../../helper/parser';
+import { parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
@@ -152,6 +152,7 @@ export default function CommandLine() {
             name='command'
             ref={inputRef}
             autoComplete='off'
+            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           ></input>
         </form>
