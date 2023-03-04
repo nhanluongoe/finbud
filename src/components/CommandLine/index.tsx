@@ -41,6 +41,7 @@ export default function CommandLine() {
     const command = inputSplits[0];
 
     switch (command.toLowerCase()) {
+      case 'c':
       case 'create': {
         const target = inputSplits[1];
         const params = inputSplits.slice(2).join(' ');
@@ -57,6 +58,7 @@ export default function CommandLine() {
         break;
       }
 
+      case 'd':
       case 'delete': {
         const target = inputSplits[1];
         const targetId = inputSplits[2];
@@ -72,7 +74,8 @@ export default function CommandLine() {
         break;
       }
 
-      case 'update' || 'u': {
+      case 'u':
+      case 'update': {
         const target = inputSplits[1];
         const targetId = inputSplits[2];
         const params = inputSplits.slice(3).join(' ');
@@ -80,6 +83,7 @@ export default function CommandLine() {
         switch (target) {
           case 'account': {
             const { name, balance } = parseParams(params);
+            console.log(balance);
             updateAccountMutation.mutate({
               id: +targetId,
               name,
