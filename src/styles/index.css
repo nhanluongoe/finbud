@@ -15,6 +15,20 @@
   h1 {
     @apply text-xl mb-2;
   }
+
+  table {
+    @apply table-auto w-full;
+    border-spacing: 0 15px;
+  }
+
+  thead {
+    @apply text-left uppercase bg-gray-100 text-text-secondary rounded-md mb-2 text-sm;
+  }
+
+  th,
+  td {
+    @apply p-1;
+  }
 }
 
 @layer components {

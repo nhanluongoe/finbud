@@ -14,8 +14,8 @@ export default function Accounts() {
   return (
     <section className='card'>
       <h1>Accounts</h1>
-      <table className='table-auto w-full'>
-        <thead className='text-left uppercase bg-gray-200 text-text-secondary rounded-md mb-2 text-sm'>
+      <table>
+        <thead>
           <tr>
             <th className='pl-3 rounded-l-md'>Id</th>
             <th>Name</th>
