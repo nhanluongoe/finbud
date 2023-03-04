@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { parseAccountParams, parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
 
 export default function CommandLine() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -110,6 +111,7 @@ export default function CommandLine() {
   };
 
   const hideInput = () => {
+    setVisible(false);
     if (inputRef.current) {
       inputRef.current.blur();
     }
@@ -122,9 +124,11 @@ export default function CommandLine() {
       hideInput();
     }
 
-    if (!isInputActive && inputRef.current) {
+    if (!isInputActive) {
       switch (e.key) {
-        case ':': {
+        case 'i': {
+          setVisible(true);
+          if (!inputRef.current) return;
           inputRef.current.value = '';
           inputRef.current.focus();
           break;
@@ -135,11 +139,22 @@ export default function CommandLine() {
 
   useEventListener('keyup', focusInput);
 
+  if (!visible) {
+    return null;
+  }
+
   return (
     <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0 bg-backdrop`}>
       <div className='flex justify-center items-center w-full h-full'>
         <form onSubmit={handleSubmit} className='w-2/3'>
+          <input
             className='w-full block rounded-md border-slate-200 py-1 px-2'
+            name='command'
+            ref={inputRef}
+            autoComplete='off'
+            autoFocus
+          ></input>
+        </form>
       </div>
     </div>
   );
