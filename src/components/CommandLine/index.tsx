@@ -136,10 +136,11 @@ export default function CommandLine() {
   useEventListener('keyup', focusInput);
 
   return (
-    <div className='my-2 border-red-500 border'>
-      <form onSubmit={handleSubmit}>
-        <input className='w-full block' name='command' ref={inputRef}></input>
-      </form>
+    <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0 bg-backdrop`}>
+      <div className='flex justify-center items-center w-full h-full'>
+        <form onSubmit={handleSubmit} className='w-2/3'>
+            className='w-full block rounded-md border-slate-200 py-1 px-2'
+      </div>
     </div>
   );
 }

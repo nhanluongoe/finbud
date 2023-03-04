@@ -7,7 +7,7 @@ import App from './App';
 import { supabase } from './lib/initSupabase';
 import { queryClient } from './lib/initReactQuery';
 
-import './index.css';
+import './styles/index.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
