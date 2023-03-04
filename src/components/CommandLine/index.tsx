@@ -148,7 +148,7 @@ export default function CommandLine() {
       <div className='flex justify-center items-center w-full h-full'>
         <form onSubmit={handleSubmit} className='w-2/3'>
           <input
-            className='w-full block rounded-md border-slate-200 py-1 px-2'
+            className='w-full block rounded-md border-slate-200 py-1 px-2 bg-canvas-50'
             name='command'
             ref={inputRef}
             autoComplete='off'

@@ -6,4 +6,9 @@
   input:focus {
     outline: 0;
   }
+
+  body {
+    min-height: 100vh;
+    @apply bg-canvas-50;
+  }
 }
