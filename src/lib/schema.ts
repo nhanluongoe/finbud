@@ -40,12 +40,62 @@ export interface Database {
           last_name?: string | null;
         };
       };
+      transactions: {
+        Row: {
+          amount: number | null;
+          created_at: string | null;
+          id: number;
+          name: string | null;
+          note: string | null;
+          receiver_id: number | null;
+          sender_id: number | null;
+        };
+        Insert: {
+          amount?: number | null;
+          created_at?: string | null;
+          id?: number;
+          name?: string | null;
+          note?: string | null;
+          receiver_id?: number | null;
+          sender_id?: number | null;
+        };
+        Update: {
+          amount?: number | null;
+          created_at?: string | null;
+          id?: number;
+          name?: string | null;
+          note?: string | null;
+          receiver_id?: number | null;
+          sender_id?: number | null;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_transactions: {
+        Args: {
+          user_id: string;
+        };
+        Returns: {
+          amount: number | null;
+          created_at: string | null;
+          id: number;
+          name: string | null;
+          note: string | null;
+          receiver_id: number | null;
+          sender_id: number | null;
+        }[];
+      };
+      make_transaction: {
+        Args: {
+          sender: number;
+          receiver: number;
+          amount: number;
+        };
+        Returns: number;
+      };
     };
     Enums: {
       [_ in never]: never;
