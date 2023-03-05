@@ -79,13 +79,15 @@ export interface Database {
           user_id: string;
         };
         Returns: {
-          amount: number | null;
-          created_at: string | null;
           id: number;
-          name: string | null;
-          note: string | null;
-          receiver_id: number | null;
-          sender_id: number | null;
+          sender_id: number;
+          receiver_id: number;
+          name: string;
+          amount: number;
+          note: string;
+          created_at: string;
+          sender_name: string;
+          receiver_name: string;
         }[];
       };
       make_transaction: {
