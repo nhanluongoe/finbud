@@ -3,6 +3,7 @@ import { Auth } from '@supabase/auth-ui-react';
 
 import { Layout } from './components';
 import { Accounts } from './components';
+import Transactions from './components/Transactions';
 
 import { supabase } from './lib/initSupabase';
 
@@ -17,6 +18,9 @@ function App() {
     <Layout>
       <div>
         <Accounts />
+      </div>
+      <div>
+        <Transactions />
       </div>
     </Layout>
   );
