@@ -64,11 +64,13 @@ export default function CommandLine() {
         const params = inputSplits.slice(2).join(' ');
 
         switch (target) {
+          case 'a':
           case 'account': {
             const { name, balance = 0 } = parseParams(params);
             addAccountMutation.mutate({ name, balance: +balance });
             break;
           }
+          case 't':
           case 'transaction': {
             const { from, to, amount = 0, note } = parseParams(params);
             const _to = to ? +to : null;
@@ -93,6 +95,7 @@ export default function CommandLine() {
         const targetId = inputSplits[2];
 
         switch (target.toLowerCase()) {
+          case 'a':
           case 'account': {
             deleteAccountMutation.mutate({ id: +targetId });
             break;
@@ -110,6 +113,7 @@ export default function CommandLine() {
         const params = inputSplits.slice(3).join(' ');
 
         switch (target) {
+          case 'a':
           case 'account': {
             const { name, balance } = parseParams(params);
             console.log(balance);
