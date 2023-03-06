@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 
 import Header from '../Header';
 import Footer from '../Footer';
-import CommandLine from '../CommandLine';
 import LoadingIndicator from '../LoadingIndicator';
 
 interface ILayout {
@@ -18,7 +17,6 @@ export default function Layout(props: ILayout) {
       </section>
       <Header />
       {children}
-      <CommandLine />
       <Footer />
     </div>
   );

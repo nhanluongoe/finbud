@@ -1,7 +1,7 @@
 import { useSession } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 
-import { Layout } from './components';
+import { CommandLine, Layout } from './components';
 import { Accounts } from './components';
 import Transactions from './components/Transactions';
 
@@ -22,6 +22,7 @@ function App() {
       <div>
         <Transactions />
       </div>
+      <CommandLine />
     </Layout>
   );
 }

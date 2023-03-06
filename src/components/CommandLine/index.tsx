@@ -3,6 +3,7 @@ import { parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
+import { addTransaction } from '../../helper/transaction';
 
 export default function CommandLine() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -10,6 +11,9 @@ export default function CommandLine() {
 
   const queryClient = useQueryClient();
 
+  /**
+   * Account
+   **/
   const addAccountMutation = useMutation({
     mutationFn: addAccount,
     onSuccess: () => {
@@ -21,6 +25,7 @@ export default function CommandLine() {
     mutationFn: deleteAccount,
     onSuccess: () => {
       queryClient.invalidateQueries(['accounts'], { exact: true });
+      queryClient.invalidateQueries(['transactions'], { exact: true });
     },
   });
 
@@ -28,6 +33,16 @@ export default function CommandLine() {
     mutationFn: updateAccount,
     onSuccess: () => {
       queryClient.invalidateQueries(['accounts'], { exact: true });
+    },
+  });
+
+  /**
+   * Account
+   **/
+  const addTransactionMutation = useMutation({
+    mutationFn: addTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['transactions']);
     },
   });
 
@@ -51,6 +66,18 @@ export default function CommandLine() {
           case 'account': {
             const { name, balance = 0 } = parseParams(params);
             addAccountMutation.mutate({ name, balance: +balance });
+            break;
+          }
+          case 'transaction': {
+            const { from, to, amount = 0, note } = parseParams(params);
+            const _to = to ? +to : null;
+            const _from = from ? +from : null;
+            addTransactionMutation.mutate({
+              sender_id: _from,
+              receiver_id: _to,
+              amount: +amount,
+              note,
+            });
             break;
           }
           default:
