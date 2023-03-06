@@ -37,7 +37,7 @@ export default function CommandLine() {
   });
 
   /**
-   * Account
+   * Transaction
    **/
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
