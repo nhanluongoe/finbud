@@ -43,6 +43,7 @@ export default function CommandLine() {
     mutationFn: addTransaction,
     onSuccess: () => {
       queryClient.invalidateQueries(['transactions']);
+      queryClient.invalidateQueries(['accounts']);
     },
   });
 
