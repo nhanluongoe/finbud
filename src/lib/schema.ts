@@ -74,6 +74,15 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
+      full_transaction: {
+        Args: {
+          sender: number;
+          receiver: number;
+          amount: number;
+          note: string;
+        };
+        Returns: number;
+      };
       get_transactions: {
         Args: {
           user_id: string;
@@ -90,11 +99,37 @@ export interface Database {
           receiver_name: string;
         }[];
       };
-      make_transaction: {
+      in_transaction: {
         Args: {
-          sender: number;
           receiver: number;
           amount: number;
+          note: string;
+        };
+        Returns: number;
+      };
+      make_transaction:
+        | {
+            Args: {
+              sender: number;
+              receiver: number;
+              amount: number;
+            };
+            Returns: number;
+          }
+        | {
+            Args: {
+              sender: number;
+              receiver: number;
+              amount: number;
+              note: string;
+            };
+            Returns: number;
+          };
+      out_transaction: {
+        Args: {
+          sender: number;
+          amount: number;
+          note: string;
         };
         Returns: number;
       };
