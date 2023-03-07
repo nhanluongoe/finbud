@@ -42,3 +42,9 @@ export async function addTransaction(transaction: Transaction['Insert']) {
 
   throw new Error('Either sender or receiver must be present');
 }
+
+export async function deleteTransaction(id: number) {
+  return await supabase.rpc('delete_transaction', {
+    id,
+  });
+}

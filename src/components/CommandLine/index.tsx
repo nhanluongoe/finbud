@@ -3,7 +3,7 @@ import { parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
-import { addTransaction } from '../../helper/transaction';
+import { addTransaction, deleteTransaction } from '../../helper/transaction';
 import { useError } from '../../context/ErrorContext';
 
 export default function CommandLine() {
@@ -42,6 +42,18 @@ export default function CommandLine() {
    **/
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries(['transactions']);
+      queryClient.invalidateQueries(['accounts']);
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  const deleteTransactionMutation = useMutation({
+    mutationFn: deleteTransaction,
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['transactions']);
@@ -103,6 +115,11 @@ export default function CommandLine() {
           case 'a':
           case 'account': {
             deleteAccountMutation.mutate({ id: +targetId });
+            break;
+          }
+          case 't':
+          case 'transaction': {
+            deleteTransactionMutation.mutate(+targetId);
             break;
           }
           default:
