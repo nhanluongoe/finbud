@@ -23,8 +23,8 @@ export async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {
   });
 }
 
-export async function deleteAccount(account: Account['Update']) {
-  return await supabase.from('accounts').delete().eq('id', account.id);
+export async function deleteAccount(id: number) {
+  return await supabase.from('accounts').delete().eq('id', id);
 }
 
 export async function updateAccount(account: Account['Update']) {

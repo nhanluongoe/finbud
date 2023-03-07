@@ -114,7 +114,7 @@ export default function CommandLine() {
         switch (target.toLowerCase()) {
           case 'a':
           case 'account': {
-            deleteAccountMutation.mutate({ id: +targetId });
+            deleteAccountMutation.mutate(+targetId);
             break;
           }
           case 't':
