@@ -74,6 +74,12 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
+      delete_transaction: {
+        Args: {
+          id: number;
+        };
+        Returns: number;
+      };
       full_transaction: {
         Args: {
           sender: number;
