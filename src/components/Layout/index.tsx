@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
 import LoadingIndicator from '../LoadingIndicator';
+import CommandError from '../CommandError';
 
 interface ILayout {
   children: ReactNode;

@@ -8,12 +8,15 @@ import { supabase } from './lib/initSupabase';
 import { queryClient } from './lib/initReactQuery';
 
 import './styles/index.css';
+import ErrorProvider from './context/ErrorContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <ErrorProvider>
+          <App />
+        </ErrorProvider>
       </QueryClientProvider>
     </SessionContextProvider>
   </React.StrictMode>,

@@ -3,6 +3,7 @@ import { Auth } from '@supabase/auth-ui-react';
 
 import { CommandLine, Layout } from './components';
 import { Accounts } from './components';
+import CommandError from './components/CommandError';
 import Transactions from './components/Transactions';
 
 import { supabase } from './lib/initSupabase';
@@ -23,6 +24,7 @@ function App() {
         <Transactions />
       </div>
       <CommandLine />
+      <CommandError />
     </Layout>
   );
 }

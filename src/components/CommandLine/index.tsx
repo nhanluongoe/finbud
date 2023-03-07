@@ -4,12 +4,13 @@ import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
 import { addTransaction } from '../../helper/transaction';
+import { useError } from '../../context/ErrorContext';
 
 export default function CommandLine() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
-
   const queryClient = useQueryClient();
+  const { setError } = useError();
 
   /**
    * Account
@@ -42,8 +43,12 @@ export default function CommandLine() {
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
+    },
+    onError: (error) => {
+      setError(error);
     },
   });
 
@@ -116,7 +121,6 @@ export default function CommandLine() {
           case 'a':
           case 'account': {
             const { name, balance } = parseParams(params);
-            console.log(balance);
             updateAccountMutation.mutate({
               id: +targetId,
               name,
