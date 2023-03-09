@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import Header from '../Header';
 import Footer from '../Footer';
 import LoadingIndicator from '../LoadingIndicator';
-import CommandError from '../CommandError';
 
 interface ILayout {
   children: ReactNode;
@@ -13,7 +12,7 @@ export default function Layout(props: ILayout) {
 
   return (
     <div className='container mx-auto px-4 relative'>
-      <section className='absolute right-0 top-0'>
+      <section className='absolute top-0 left-1/2 -translate-x-1/2'>
         <LoadingIndicator />
       </section>
       <Header />
