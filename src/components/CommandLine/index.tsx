@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
 import { addTransaction, deleteTransaction, updateTransaction } from '../../helper/transaction';
 import { useError } from '../../context/ErrorContext';
+import { supabase } from '../../lib/initSupabase';
 
 export default function CommandLine() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -93,6 +94,12 @@ export default function CommandLine() {
     const command = inputSplits[0];
 
     switch (command.toLowerCase()) {
+      // Auth
+      case 'logout': {
+        await supabase.auth.signOut();
+        break;
+      }
+      // Crud
       case 'c':
       case 'create': {
         const target = inputSplits[1];
