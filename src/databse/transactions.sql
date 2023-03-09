@@ -54,6 +54,7 @@ begin
 end
 $$ language plpgsql;
 
+-- get
 create or replace function get_transactions(user_id text) returns table (
   id int,
   sender_id int8,
@@ -77,6 +78,7 @@ end
 $$ language plpgsql;
 
 
+-- delete
 create or replace function delete_transaction(id int) returns int as $$
 declare
   s_id int8;
@@ -103,3 +105,54 @@ begin
 end
 $$ language plpgsql;
 
+create or replace function update_transaction(
+  id int, 
+  name text DEFAULT NULL, 
+  sender int8 DEFAULT NULL, 
+  receiver int8 DEFAULT NULL, 
+  amount numeric DEFAULT NULL, 
+  note text DEFAULT NULL
+) returns int as $$
+declare
+  -- values of current transaction
+  c_name text;
+  c_s_id int8;
+  c_r_id int8;
+  c_amt numeric;
+  c_note text;
+begin
+  select t.name, t.sender_id, t.receiver_id, t.amount, t.amount, t.note from public.transactions t
+  where t.id = update_transaction.id
+  into c_name, c_s_id, c_r_id, c_amt, c_note;
+
+  if c_s_id is not null then
+    update public.accounts a
+    set balance = balance + c_amt 
+    where a.id = c_s_id;
+  end if;
+    
+  update public.accounts a
+  set balance = balance - COALESCE(update_transaction.amount, c_amt)
+  where a.id = COALESCE(update_transaction.sender, c_s_id);
+
+  if c_r_id is not null then
+    update public.accounts a
+    set balance = balance - c_amt
+    where a.id = c_r_id;
+  end if;
+    
+  update public.accounts a
+  set balance = balance + COALESCE(update_transaction.amount, c_amt)
+  where a.id = COALESCE(update_transaction.receiver, c_r_id);
+
+  update public.transactions t
+  set name = COALESCE(update_transaction.name, t.name),
+      sender_id = COALESCE(update_transaction.sender, t.sender_id),
+      receiver_id = COALESCE(update_transaction.receiver, t.receiver_id),
+      amount = COALESCE(update_transaction.amount, t.amount),
+      note = COALESCE(update_transaction.note, t.note)
+  where t.id = update_transaction.id;
+
+  return update_transaction.id;
+end
+$$ language plpgsql;

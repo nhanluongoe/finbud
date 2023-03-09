@@ -48,3 +48,20 @@ export async function deleteTransaction(id: number) {
     id,
   });
 }
+
+export async function updateTransaction(transaction: Transaction['Update']) {
+  const { id, name, sender_id: senderId, receiver_id: receiverId, amount, note } = transaction;
+
+  if (!id) {
+    throw new Error("Transaction doesn't exist");
+  }
+
+  return await supabase.rpc('update_transaction', {
+    id: id,
+    name: name ?? undefined,
+    sender: senderId ?? undefined,
+    receiver: receiverId ?? undefined,
+    amount: amount ?? undefined,
+    note: note ?? undefined,
+  });
+}

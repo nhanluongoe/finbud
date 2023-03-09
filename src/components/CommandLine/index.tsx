@@ -3,7 +3,7 @@ import { parseParams } from '../../helper/parser';
 import { addAccount, deleteAccount, updateAccount } from '../../helper/account';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
-import { addTransaction, deleteTransaction } from '../../helper/transaction';
+import { addTransaction, deleteTransaction, updateTransaction } from '../../helper/transaction';
 import { useError } from '../../context/ErrorContext';
 
 export default function CommandLine() {
@@ -54,6 +54,18 @@ export default function CommandLine() {
 
   const deleteTransactionMutation = useMutation({
     mutationFn: deleteTransaction,
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries(['transactions']);
+      queryClient.invalidateQueries(['accounts']);
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  const updateTransactionMutation = useMutation({
+    mutationFn: updateTransaction,
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['transactions']);
@@ -142,6 +154,22 @@ export default function CommandLine() {
               id: +targetId,
               name,
               balance: balance === undefined ? balance : +balance,
+            });
+            break;
+          }
+          case 't':
+          case 'transaction': {
+            const { name, from, to, amount, note } = parseParams(params);
+            const _from = from ? +from : null;
+            const _to = to ? +to : null;
+            const _amount = amount ? +amount : null;
+            updateTransactionMutation.mutate({
+              id: +targetId,
+              name,
+              sender_id: _from,
+              receiver_id: _to,
+              amount: _amount,
+              note,
             });
             break;
           }
