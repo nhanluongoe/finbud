@@ -139,6 +139,17 @@ export interface Database {
         };
         Returns: number;
       };
+      update_transaction: {
+        Args: {
+          id: number;
+          name?: string;
+          sender?: number;
+          receiver?: number;
+          amount?: number;
+          note?: string;
+        };
+        Returns: number;
+      };
     };
     Enums: {
       [_ in never]: never;
