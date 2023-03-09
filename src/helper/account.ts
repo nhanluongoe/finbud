@@ -5,7 +5,11 @@ export async function fetchAccounts() {
   const session = await supabase.auth.getSession();
   const userId = session.data.session?.user.id;
 
-  return await supabase.from('accounts').select().eq('user_id', userId);
+  return await supabase
+    .from('accounts')
+    .select()
+    .eq('user_id', userId)
+    .order('id', { ascending: true });
 }
 
 export async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {

@@ -6,7 +6,9 @@ export async function fetchTransactions(userId: string | undefined) {
     throw new Error("User doesn't exist!");
   }
 
-  return await supabase.rpc('get_transactions', { user_id: userId });
+  return await supabase
+    .rpc('get_transactions', { user_id: userId })
+    .order('id', { ascending: true });
 }
 
 export async function addTransaction(transaction: Transaction['Insert']) {
