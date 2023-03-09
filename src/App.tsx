@@ -17,12 +17,12 @@ function App() {
 
   return (
     <Layout>
-      <div>
+      <section>
         <Accounts />
-      </div>
-      <div>
+      </section>
+      <section>
         <Transactions />
-      </div>
+      </section>
       <CommandLine />
       <CommandError />
     </Layout>
