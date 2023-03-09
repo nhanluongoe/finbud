@@ -226,7 +226,7 @@ export default function CommandLine() {
 
   return (
     <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0 bg-backdrop`}>
-      <div className='flex justify-center items-center w-full h-full'>
+      <div className='flex justify-center items-end w-full h-full pb-5'>
         <form onSubmit={handleSubmit} className='w-2/3'>
           <input
             className='w-full block rounded-md border-slate-200 py-1 px-2 bg-canvas-50'
