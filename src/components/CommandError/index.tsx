@@ -6,7 +6,7 @@ export default function CommandError() {
   if (!message) return null;
 
   return (
-    <div className='fixed bottom-0 w-max'>
+    <div className='fixed bottom-0 left-0 w-max ml-5'>
       <p className='text-red-500 font-bold'>Error: {message}</p>
     </div>
   );

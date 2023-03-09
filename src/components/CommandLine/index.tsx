@@ -83,6 +83,12 @@ export default function CommandLine() {
       command: { value: string };
     };
 
+    if (eventTarget.command.value === '') {
+      setError(null);
+      hideInput();
+      return;
+    }
+
     const inputSplits = eventTarget.command.value.split(' ');
     const command = inputSplits[0];
 
@@ -95,12 +101,14 @@ export default function CommandLine() {
         switch (target) {
           case 'a':
           case 'account': {
+            setError(null);
             const { name, balance = 0 } = parseParams(params);
             addAccountMutation.mutate({ name, balance: +balance });
             break;
           }
           case 't':
           case 'transaction': {
+            setError(null);
             const { from, to, amount = 0, note } = parseParams(params);
             const _to = to ? +to : null;
             const _from = from ? +from : null;
@@ -113,6 +121,7 @@ export default function CommandLine() {
             break;
           }
           default:
+            setError('Invalid create command!');
             break;
         }
         break;
@@ -126,15 +135,18 @@ export default function CommandLine() {
         switch (target.toLowerCase()) {
           case 'a':
           case 'account': {
+            setError(null);
             deleteAccountMutation.mutate(+targetId);
             break;
           }
           case 't':
           case 'transaction': {
+            setError(null);
             deleteTransactionMutation.mutate(+targetId);
             break;
           }
           default:
+            setError('Invalid delete command!');
             break;
         }
         break;
@@ -149,6 +161,7 @@ export default function CommandLine() {
         switch (target) {
           case 'a':
           case 'account': {
+            setError(null);
             const { name, balance } = parseParams(params);
             updateAccountMutation.mutate({
               id: +targetId,
@@ -159,6 +172,7 @@ export default function CommandLine() {
           }
           case 't':
           case 'transaction': {
+            setError(null);
             const { name, from, to, amount, note } = parseParams(params);
             const _from = from ? +from : null;
             const _to = to ? +to : null;
@@ -174,6 +188,7 @@ export default function CommandLine() {
             break;
           }
           default: {
+            setError('Invalid update command!');
             break;
           }
         }
@@ -181,17 +196,18 @@ export default function CommandLine() {
       }
 
       default:
+        setError('Invalid command!');
         break;
-    }
-
-    if (inputRef.current) {
-      inputRef.current.value = '';
     }
 
     hideInput();
   };
 
   const hideInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+
     setVisible(false);
     if (inputRef.current) {
       inputRef.current.blur();
@@ -226,8 +242,8 @@ export default function CommandLine() {
 
   return (
     <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0 bg-backdrop`}>
-      <div className='flex justify-center items-end w-full h-full pb-5'>
-        <form onSubmit={handleSubmit} className='w-2/3'>
+      <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
+        <form onSubmit={handleSubmit} className='w-full'>
           <input
             className='w-full block rounded-md border-slate-200 py-1 px-2 bg-canvas-50'
             name='command'
