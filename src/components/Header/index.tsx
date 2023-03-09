@@ -44,11 +44,17 @@ export default function Header() {
 
   return (
     <header className='my-5'>
-      <div className='flex items-center justify-end'>
-        <i className='mr-2'>
-          <Icon />
-        </i>
-        <p>{`${firstName} ${lastName}`}</p>
+      <div className='flex items-center justify-between'>
+        <section className='flex items-center w-12 h-12'>
+          <img src='/logo.png' alt='logo' />
+          <p className='font-bold'>Finbud</p>
+        </section>
+        <section className='flex items-center'>
+          <i className='mr-2'>
+            <Icon />
+          </i>
+          <p>{`${firstName} ${lastName}`}</p>
+        </section>
       </div>
     </header>
   );
