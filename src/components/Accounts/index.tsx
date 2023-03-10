@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
+import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { RiBankCard2Fill } from 'react-icons/ri';
-import { toCurrency } from '../../helper';
 
-import { fetchAccounts } from '../../helper/account';
+import { fetchAccounts, toCurrency } from '../../helper';
 
 export default function Accounts() {
   const { data } = useQuery({
@@ -27,17 +27,27 @@ export default function Accounts() {
       <table>
         <thead>
           <tr>
-            <th className='pl-3 rounded-l-md'>Id</th>
-            <th>Name</th>
-            <th className='pr-3 rounded-r-md'>Balance</th>
+            <th className='pl-3 rounded-l-md'></th>
+            <th>
+              <div className='flex items-center justify-center'>
+                <MdTextFormat className='mr-1' />
+                <span>Name</span>
+              </div>
+            </th>
+            <th className='pr-3 rounded-r-md'>
+              <div className='flex items-center justify-center'>
+                <MdNumbers className='mr-1' />
+                <span>Balance</span>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
           {data.map((account) => (
             <tr key={account.id}>
-              <td className='pl-3'>{account.id}</td>
+              <td className='pl-3 text-gray-400 text-left'>{account.id}</td>
               <td>{account.name}</td>
-              <td className='pr-3'>{toCurrency(account.balance ?? 0)}</td>
+              <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
             </tr>
           ))}
         </tbody>

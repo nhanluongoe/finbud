@@ -28,6 +28,7 @@
   th,
   td {
     @apply p-1;
+    @apply text-center;
   }
 }
 

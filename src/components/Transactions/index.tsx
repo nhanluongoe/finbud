@@ -1,5 +1,7 @@
 import { useSession } from '@supabase/auth-helpers-react';
-import { BiTransfer } from 'react-icons/bi';
+import { BiTransfer, BiNote } from 'react-icons/bi';
+import { BsArrowDownLeft, BsArrowUpRight } from 'react-icons/bs';
+import { MdNumbers, MdOutlineDateRange, MdTextFormat } from 'react-icons/md';
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchTransactions } from '../../helper/transaction';
@@ -30,23 +32,52 @@ export default function Transactions() {
       <table>
         <thead>
           <tr>
-            <th className='pl-3 rounded-l-md'>Id</th>
-            <th>Name</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Amount</th>
-            <th>Note</th>
-            <th className='pr-3 rounded-r-md'>Date</th>
+            <th className='pl-3 rounded-l-md'></th>
+            <th>
+              <div className='flex items-center justify-center'>
+                <MdTextFormat className='mr-1' />
+                <span>Name</span>
+              </div>
+            </th>
+            <th>
+              <div className='flex items-center justify-center'>
+                <BsArrowDownLeft className='mr-1' />
+                <span>From</span>
+              </div>
+            </th>
+            <th className='flex items-center justify-center'>
+              <div className='flex items-center justify-center'>
+                <BsArrowUpRight className='mr-1' /> <span>To</span>
+              </div>
+            </th>
+            <th>
+              <div className='flex items-center justify-center'>
+                <MdNumbers className='mr-1' />
+                <span>Amount</span>
+              </div>
+            </th>
+            <th>
+              <div className='flex items-center justify-center'>
+                <BiNote className='mr-1' />
+                <span>Note</span>
+              </div>
+            </th>
+            <th className='pr-3 rounded-r-md'>
+              <div className='flex items-center justify-center'>
+                <MdOutlineDateRange className='mr-1' />
+                <span>Date</span>
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
           {data.data?.map((transaction) => (
             <tr key={transaction.id}>
-              <td className='pl-3'>{transaction.id}</td>
+              <td className='pl-3 text-gray-400 text-left'>{transaction.id}</td>
               <td>{transaction.name}</td>
               <td>{transaction.sender_name}</td>
               <td>{transaction.receiver_name}</td>
-              <td>{toCurrency(transaction.amount)}</td>
+              <td className='text-right'>{toCurrency(transaction.amount)}</td>
               <td>{transaction.note}</td>
               <td className='pr-3'>{transaction.created_at}</td>
             </tr>
