@@ -23,6 +23,26 @@ export interface Database {
           user_id?: string;
         };
       };
+      budgets: {
+        Row: {
+          amount: number | null;
+          created_at: string | null;
+          id: number;
+          remaining: number | null;
+        };
+        Insert: {
+          amount?: number | null;
+          created_at?: string | null;
+          id?: number;
+          remaining?: number | null;
+        };
+        Update: {
+          amount?: number | null;
+          created_at?: string | null;
+          id?: number;
+          remaining?: number | null;
+        };
+      };
       profiles: {
         Row: {
           first_name: string | null;
@@ -43,6 +63,7 @@ export interface Database {
       transactions: {
         Row: {
           amount: number | null;
+          budget_id: number | null;
           created_at: string | null;
           id: number;
           name: string | null;
@@ -52,6 +73,7 @@ export interface Database {
         };
         Insert: {
           amount?: number | null;
+          budget_id?: number | null;
           created_at?: string | null;
           id?: number;
           name?: string | null;
@@ -61,6 +83,7 @@ export interface Database {
         };
         Update: {
           amount?: number | null;
+          budget_id?: number | null;
           created_at?: string | null;
           id?: number;
           name?: string | null;
