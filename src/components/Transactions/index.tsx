@@ -1,4 +1,6 @@
 import { useSession } from '@supabase/auth-helpers-react';
+import { BiTransfer } from 'react-icons/bi';
+
 import { useQuery } from '@tanstack/react-query';
 import { fetchTransactions } from '../../helper/transaction';
 
@@ -15,7 +17,14 @@ export default function Transactions() {
 
   return (
     <section className='card'>
-      <h1>Transactions</h1>
+      <div className='text-green-600 flex items-center mb-2 p-2'>
+        <span className='mr-2'>
+          <i className='text-2xl'>
+            <BiTransfer />
+          </i>
+        </span>
+        <h1 className='m-0 font-bold'>Transactions</h1>
+      </div>
 
       <table>
         <thead>

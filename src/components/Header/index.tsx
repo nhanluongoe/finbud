@@ -43,18 +43,13 @@ export default function Header() {
   const Icon = faceIcons[randomIconIndex];
 
   return (
-    <header className='my-5'>
+    <header className='mb-6'>
       <div className='flex items-center justify-between'>
         <section className='flex items-center w-12 h-12'>
-          <img src='/logo.png' alt='logo' />
-          <p className='font-bold'>Finbud</p>
+          <img src='/finbud.png' alt='logo' />
+          <p className='font-bold text-green-600'>Finbud</p>
         </section>
-        <section className='flex items-center'>
-          <i className='mr-2'>
-            <Icon />
-          </i>
-          <p>{`${firstName} ${lastName}`}</p>
-        </section>
+        <p className='text-green-600'>{` Hi, ${firstName} ${lastName}`}</p>
       </div>
     </header>
   );

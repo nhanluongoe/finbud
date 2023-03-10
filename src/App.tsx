@@ -17,7 +17,7 @@ function App() {
 
   return (
     <Layout>
-      <section>
+      <section className='mb-5'>
         <Accounts />
       </section>
       <section>

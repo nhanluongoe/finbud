@@ -13,7 +13,7 @@
   }
 
   h1 {
-    @apply text-xl mb-2;
+    @apply text-2xl mb-2;
   }
 
   table {
@@ -22,7 +22,7 @@
   }
 
   thead {
-    @apply text-left uppercase bg-gray-100 text-text-secondary rounded-md mb-2 text-sm;
+    @apply text-left uppercase bg-gray-100 text-gray-500 rounded-md mb-2 text-xs;
   }
 
   th,
@@ -33,6 +33,6 @@
 
 @layer components {
   .card {
-    @apply p-4 bg-canvas-50 rounded-md m-2 shadow-canvas-300 drop-shadow-sm;
+    @apply p-4 bg-canvas-50 rounded-md shadow-canvas-300 drop-shadow-md border-t-2 border-t-green-600;
   }
 }

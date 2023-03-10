@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { RiBankCard2Fill } from 'react-icons/ri';
+
 import { fetchAccounts } from '../../helper/account';
 
 export default function Accounts() {
@@ -13,7 +15,14 @@ export default function Accounts() {
 
   return (
     <section className='card'>
-      <h1>Accounts</h1>
+      <div className='text-green-600 flex items-center mb-2 p-2'>
+        <span className='mr-2'>
+          <i className='text-2xl'>
+            <RiBankCard2Fill />
+          </i>
+        </span>
+        <h1 className='m-0 font-bold'>Accounts</h1>
+      </div>
       <table>
         <thead>
           <tr>
