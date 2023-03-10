@@ -3,6 +3,7 @@ import { BiTransfer } from 'react-icons/bi';
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchTransactions } from '../../helper/transaction';
+import { toCurrency } from '../../helper';
 
 export default function Transactions() {
   const session = useSession();
@@ -45,7 +46,7 @@ export default function Transactions() {
               <td>{transaction.name}</td>
               <td>{transaction.sender_name}</td>
               <td>{transaction.receiver_name}</td>
-              <td>{transaction.amount}</td>
+              <td>{toCurrency(transaction.amount)}</td>
               <td>{transaction.note}</td>
               <td className='pr-3'>{transaction.created_at}</td>
             </tr>
