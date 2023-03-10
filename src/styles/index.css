@@ -9,7 +9,7 @@
 
   body {
     min-height: 100vh;
-    @apply bg-canvas-100 font-mono;
+    @apply bg-canvas-100 font-roboto;
   }
 
   h1 {
