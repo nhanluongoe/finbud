@@ -1,5 +1,6 @@
 create table public.budgets (
   id serial not null,
+  name text,
   amount numeric default 0,
   remaining numeric default 0,
   created_at date default now(),

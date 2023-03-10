@@ -6,6 +6,7 @@ import useEventListener from '../../hooks/useEventLister';
 import { addTransaction, deleteTransaction, updateTransaction } from '../../helper/transaction';
 import { useError } from '../../context/ErrorContext';
 import { supabase } from '../../lib/initSupabase';
+import { addBudget, deleteBudget } from '../../helper';
 
 export default function CommandLine() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,6 +72,33 @@ export default function CommandLine() {
       setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['budgets']);
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  /**
+   * Budgets
+   **/
+
+  const addBudgetMutation = useMutation({
+    mutationFn: addBudget,
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries(['budgets']);
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  const deleteBudgetMutation = useMutation({
+    mutationFn: deleteBudget,
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries(['budgets']);
     },
     onError: (error) => {
       setError(error);
@@ -127,6 +155,16 @@ export default function CommandLine() {
             });
             break;
           }
+          case 'b':
+          case 'budget': {
+            setError(null);
+            const { name, amount = 0 } = parseParams(params);
+            addBudgetMutation.mutate({
+              name,
+              amount: +amount,
+            });
+            break;
+          }
           default:
             setError('Invalid create command!');
             break;
@@ -150,6 +188,12 @@ export default function CommandLine() {
           case 'transaction': {
             setError(null);
             deleteTransactionMutation.mutate(+targetId);
+            break;
+          }
+          case 'b':
+          case 'budget': {
+            setError(null);
+            deleteBudgetMutation.mutate(+targetId);
             break;
           }
           default:

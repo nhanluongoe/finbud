@@ -3,6 +3,7 @@ import { Auth } from '@supabase/auth-ui-react';
 
 import { CommandLine, Layout } from './components';
 import { Accounts } from './components';
+import Budgets from './components/Budgets';
 import CommandError from './components/CommandError';
 import Transactions from './components/Transactions';
 
@@ -17,8 +18,13 @@ function App() {
 
   return (
     <Layout>
-      <section className='mb-5'>
-        <Accounts />
+      <section className='mb-5 flex items-stretch gap-4'>
+        <div className='flex-grow'>
+          <Accounts />
+        </div>
+        <div className='flex-grow'>
+          <Budgets />
+        </div>
       </section>
       <section>
         <Transactions />

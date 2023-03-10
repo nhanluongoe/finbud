@@ -28,18 +28,21 @@ export interface Database {
           amount: number | null;
           created_at: string | null;
           id: number;
+          name: string | null;
           remaining: number | null;
         };
         Insert: {
           amount?: number | null;
           created_at?: string | null;
           id?: number;
+          name?: string | null;
           remaining?: number | null;
         };
         Update: {
           amount?: number | null;
           created_at?: string | null;
           id?: number;
+          name?: string | null;
           remaining?: number | null;
         };
       };
@@ -66,7 +69,6 @@ export interface Database {
           budget_id: number | null;
           created_at: string | null;
           id: number;
-          name: string | null;
           note: string | null;
           receiver_id: number | null;
           sender_id: number | null;
@@ -76,7 +78,6 @@ export interface Database {
           budget_id?: number | null;
           created_at?: string | null;
           id?: number;
-          name?: string | null;
           note?: string | null;
           receiver_id?: number | null;
           sender_id?: number | null;
@@ -86,7 +87,6 @@ export interface Database {
           budget_id?: number | null;
           created_at?: string | null;
           id?: number;
-          name?: string | null;
           note?: string | null;
           receiver_id?: number | null;
           sender_id?: number | null;
