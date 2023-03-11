@@ -311,11 +311,12 @@ export default function CommandLine() {
           <p className='text-gray-500 mb-1'>
             Type &quot;help&quot; to show a quick introduction about the commands!
           </p>
-          <div className='flex items-center w-full  rounded-md border-green-600 border py-1 px-2 bg-canvas-50 text-gray-600'>
-            <span>
+          <div className='flex items-center w-full  rounded-md border-green-600 border py-1 px-2 bg-canvas-50'>
+            <span className='text-green-600'>
               <IoIosArrowForward />
             </span>
             <input
+              className='text-gray-600 w-full'
               name='command'
               ref={inputRef}
               autoComplete='off'
