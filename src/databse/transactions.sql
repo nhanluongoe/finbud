@@ -32,29 +32,44 @@ create policy "Enable insert for authenticated users only" on public.transaction
 create policy "Enable delete for authenticated users only" public.transactions for delete to authenticated using (true);
 
 -- Functions
-create or replace function delete_transaction(id) returns int as $$
+
+-- add
+create or replace function add_transaction(
+  sender bigint default null, 
+  receiver bigint default null,
+  amount numeric default 0,
+  budget bigint default null,
+  note text default '',
+)
+returns int as $$
 declare
-  s_id int8;
-  r_id int8;
-  amt numeric;
+  new_row int8;
 begin
-          select t.sender_id, t.receiver_id
-          from public.transactions t
-          where t.id = delete_transaction.id
-          returning sender_id, receiver_id, amount into s_id, r_id, amt;
+  insert into public.transactions (sender_id, receiver_id, amount, budget_id, note)
+  values (add_transaction.sender, add_transaction.receiver, add_transaction.amount, add_transaction.budget, add_transaction.note)
+  returning id into new_row;
 
-          update public.accounts
-          set balance = balance + amt
-          where id = s_id;
+  if add_transaction.sender is not null then
+    update public.accounts
+    set balance = balance - add_transaction.amount
+    where id = add_transaction.sender;
+    
+    if add_transaction.budget is not null then
+      update public.budgets
+      set remaining = remaining - add_transaction.amount
+      where id = add_transaction.budget;
+    end if;
+  end if;
 
-          update public.accounts
-          set balance = balance - amt
-          where id = r_id;
+  if add_transaction.receiver is not null then
+    update public.accounts
+    set balance = balance + add_transaction.amount
+    where id = add_transaction.receiver;
+  end if;
 
-          returns delete_transaction.id;
+  return new_row;
 end
 $$ language plpgsql;
-
 -- get
 create or replace function get_transactions(user_id text) returns table (
   id int,
@@ -88,12 +103,13 @@ create or replace function delete_transaction(id int) returns int as $$
 declare
   s_id int8;
   r_id int8;
+  b_id int8;
   amt numeric;
 begin
-          select t.sender_id, t.receiver_id, t.amount
+          select t.sender_id, t.receiver_id, t.budget_id, t.amount
           from public.transactions t
           where t.id = delete_transaction.id
-          into s_id, r_id, amt;
+          into s_id, r_id, b_id, amt;
 
           delete from transactions t
           where t.id = delete_transaction.id;
@@ -106,10 +122,16 @@ begin
           set balance = balance - amt
           where a.id = r_id;
 
+          update public.budgets b
+          set remaining = remaining + amt
+          where b.id = b_id;
+
+
           return delete_transaction.id;
 end
 $$ language plpgsql;
 
+-- update
 create or replace function update_transaction(
   id int, 
   name text DEFAULT NULL, 
