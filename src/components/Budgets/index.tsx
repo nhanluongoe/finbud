@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
+import { BsBox } from 'react-icons/bs';
 
 import { fetchBudgets, toCurrency } from '../../helper';
 
@@ -17,7 +18,9 @@ export default function Budgets() {
     <section className='card'>
       <div className='text-green-600 flex items-center mb-2 p-2'>
         <span className='mr-2'>
-          <i className='text-2xl'></i>
+          <i className='text-2xl'>
+            <BsBox />
+          </i>
         </span>
         <h1 className='m-0 font-bold'>Budgets</h1>
       </div>
