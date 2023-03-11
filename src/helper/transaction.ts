@@ -1,9 +1,15 @@
+import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { supabase } from '../lib/initSupabase';
+import { Database } from '../lib/schema';
 import { Transaction } from '../types';
 
-export async function fetchTransactions(userId: string | undefined) {
+export async function fetchTransactions(
+  userId: string | undefined,
+): Promise<
+  PostgrestSingleResponse<Database['public']['Functions']['get_transactions']['Returns']>
+> {
   if (!userId) {
-    throw new Error("User doesn't exist!");
+    throw new Error("User doesn't exist");
   }
 
   return await supabase

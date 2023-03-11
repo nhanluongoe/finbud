@@ -14,7 +14,7 @@ export default function Transactions() {
   const data = useQuery({
     queryKey: ['transactions'],
     queryFn: async () => await fetchTransactions(user?.id),
-    select: (data) => data.data,
+    select: (res) => res.data,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -78,6 +78,7 @@ export default function Transactions() {
               <td>{transaction.sender_name}</td>
               <td>{transaction.receiver_name}</td>
               <td className='text-right'>{toCurrency(transaction.amount)}</td>
+              <td>{transaction.budget_name}</td>
               <td>{transaction.note}</td>
               <td className='pr-3'>{transaction.created_at}</td>
             </tr>

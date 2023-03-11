@@ -69,6 +69,7 @@ export interface Database {
           budget_id: number | null;
           created_at: string | null;
           id: number;
+          name: string | null;
           note: string | null;
           receiver_id: number | null;
           sender_id: number | null;
@@ -78,6 +79,7 @@ export interface Database {
           budget_id?: number | null;
           created_at?: string | null;
           id?: number;
+          name?: string | null;
           note?: string | null;
           receiver_id?: number | null;
           sender_id?: number | null;
@@ -87,6 +89,7 @@ export interface Database {
           budget_id?: number | null;
           created_at?: string | null;
           id?: number;
+          name?: string | null;
           note?: string | null;
           receiver_id?: number | null;
           sender_id?: number | null;
