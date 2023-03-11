@@ -58,6 +58,12 @@ export default function Transactions() {
             </th>
             <th>
               <div className='flex items-center justify-center'>
+                <MdTextFormat className='mr-1' />
+                <span>Budget</span>
+              </div>
+            </th>
+            <th>
+              <div className='flex items-center justify-center'>
                 <BiNote className='mr-1' />
                 <span>Note</span>
               </div>
@@ -73,7 +79,7 @@ export default function Transactions() {
         <tbody>
           {data.data?.map((transaction) => (
             <tr key={transaction.id}>
-              <td className='pl-3 text-gray-400 text-left'>{transaction.id}</td>
+              <td className='pl-3 text-gray-400 text-left text-sm'>{transaction.id}</td>
               <td>{transaction.name}</td>
               <td>{transaction.sender_name}</td>
               <td>{transaction.receiver_name}</td>

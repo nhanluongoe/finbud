@@ -45,7 +45,7 @@ export default function Accounts() {
         <tbody>
           {data.map((account) => (
             <tr key={account.id}>
-              <td className='pl-3 text-gray-400 text-left'>{account.id}</td>
+              <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
               <td>{account.name}</td>
               <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
             </tr>

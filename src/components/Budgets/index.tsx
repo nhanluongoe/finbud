@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { MdNumbers, MdTextFormat } from 'react-icons/md';
+
 import { fetchBudgets, toCurrency } from '../../helper';
 
 export default function Budgets() {
@@ -25,16 +27,19 @@ export default function Budgets() {
             <th className='pl-3 rounded-l-md'></th>
             <th>
               <div className='flex items-center justify-center'>
+                <MdTextFormat className='mr-1' />
                 <span>Name</span>
               </div>
             </th>
             <th className='pr-3 rounded-r-md'>
               <div className='flex items-center justify-center'>
+                <MdNumbers className='mr-1' />
                 <span>Amount</span>
               </div>
             </th>
             <th className='pr-3 rounded-r-md'>
               <div className='flex items-center justify-center'>
+                <MdNumbers className='mr-1' />
                 <span>Remaining</span>
               </div>
             </th>
@@ -43,7 +48,7 @@ export default function Budgets() {
         <tbody>
           {data.map((budget) => (
             <tr key={budget.id}>
-              <td className='pl-3 text-gray-400 text-left'>{budget.id}</td>
+              <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
               <td>{budget.name}</td>
               <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
               <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
