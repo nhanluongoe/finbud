@@ -14,6 +14,7 @@ import {
   deleteBudget,
   deleteTransaction,
   updateAccount,
+  updateBudget,
   updateTransaction,
 } from '../../helper';
 
@@ -107,6 +108,17 @@ export default function CommandLine() {
 
   const deleteBudgetMutation = useMutation({
     mutationFn: deleteBudget,
+    onSuccess: () => {
+      setError(null);
+      queryClient.invalidateQueries(['budgets']);
+    },
+    onError: (error) => {
+      setError(error);
+    },
+  });
+
+  const updateBudgetMutation = useMutation({
+    mutationFn: updateBudget,
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['budgets']);
@@ -250,6 +262,19 @@ export default function CommandLine() {
               amount: _amount,
               budget_id: _budget,
               note,
+            });
+            break;
+          }
+          case 'b':
+          case 'budget': {
+            setError(null);
+            const { name, amount } = parseParams(params);
+            const _amount = amount ? +amount : null;
+            console.log(+targetId);
+            updateBudgetMutation.mutate({
+              id: +targetId,
+              name,
+              amount: _amount,
             });
             break;
           }

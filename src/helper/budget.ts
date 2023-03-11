@@ -27,3 +27,29 @@ export async function addBudget(budget: Omit<Budget['Insert'], 'remaining' | 'cr
 export async function deleteBudget(id: number) {
   return await supabase.from('budgets').delete().eq('id', id);
 }
+
+//TODO: abstract this out to a postgres function
+export async function updateBudget(budget: Omit<Budget['Update'], 'remaining'>) {
+  const { data: currentBudget } = await supabase
+    .from('budgets')
+    .select()
+    .eq('id', budget.id)
+    .limit(1)
+    .single();
+
+  const currentRemaining = currentBudget?.remaining;
+  const currentAmount = currentBudget?.amount;
+
+  let updatedRemaining;
+  if (budget.amount && currentRemaining && currentAmount) {
+    updatedRemaining = currentRemaining + budget.amount - currentAmount;
+  }
+
+  return await supabase
+    .from('budgets')
+    .update({
+      ...budget,
+      remaining: updatedRemaining,
+    })
+    .eq('id', budget.id);
+}
