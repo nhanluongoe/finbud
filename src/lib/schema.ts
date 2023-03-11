@@ -122,10 +122,12 @@ export interface Database {
           receiver_id: number;
           name: string;
           amount: number;
+          budget_id: number;
           note: string;
           created_at: string;
           sender_name: string;
           receiver_name: string;
+          budget_name: string;
         }[];
       };
       in_transaction: {
