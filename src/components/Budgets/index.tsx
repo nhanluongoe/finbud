@@ -35,7 +35,7 @@ export default function Budgets() {
             </th>
             <th className='pr-3 rounded-r-md'>
               <div className='flex items-center justify-center'>
-                <span>Amount</span>
+                <span>Remaining</span>
               </div>
             </th>
           </tr>
