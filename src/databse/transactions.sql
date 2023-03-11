@@ -138,6 +138,7 @@ create or replace function update_transaction(
   sender int8 DEFAULT NULL, 
   receiver int8 DEFAULT NULL, 
   amount numeric DEFAULT NULL, 
+  budget int8 DEFAULT null,
   note text DEFAULT NULL
 ) returns int as $$
 declare
@@ -146,11 +147,12 @@ declare
   c_s_id int8;
   c_r_id int8;
   c_amt numeric;
+  c_b_id int8;
   c_note text;
 begin
-  select t.name, t.sender_id, t.receiver_id, t.amount, t.amount, t.note from public.transactions t
+  select t.name, t.sender_id, t.receiver_id, t.amount, t.budget_id, t.note from public.transactions t
   where t.id = update_transaction.id
-  into c_name, c_s_id, c_r_id, c_amt, c_note;
+  into c_name, c_s_id, c_r_id, c_amt, c_b_id, c_note;
 
   if c_s_id is not null then
     update public.accounts a
@@ -172,11 +174,22 @@ begin
   set balance = balance + COALESCE(update_transaction.amount, c_amt)
   where a.id = COALESCE(update_transaction.receiver, c_r_id);
 
+  if c_b_id is not null then
+    update public.budgets b
+    set remaining = remaining + c_amt
+    where b.id = c_b_id;
+  end if;
+
+  update public.budgets b
+  set remaining = remaining - COALESCE(update_transaction.amount, c_amt, 0)
+  where b.id = COALESCE(update_transaction.budget, c_b_id);
+
   update public.transactions t
   set name = COALESCE(update_transaction.name, t.name),
       sender_id = COALESCE(update_transaction.sender, t.sender_id),
       receiver_id = COALESCE(update_transaction.receiver, t.receiver_id),
       amount = COALESCE(update_transaction.amount, t.amount),
+      budget_id = COALESCE(update_transaction.budget, t.budget_id),
       note = COALESCE(update_transaction.note, t.note)
   where t.id = update_transaction.id;
 

@@ -237,16 +237,18 @@ export default function CommandLine() {
           case 't':
           case 'transaction': {
             setError(null);
-            const { name, from, to, amount, note } = parseParams(params);
+            const { name, from, to, amount, budget, note } = parseParams(params);
             const _from = from ? +from : null;
             const _to = to ? +to : null;
             const _amount = amount ? +amount : null;
+            const _budget = budget ? +budget : null;
             updateTransactionMutation.mutate({
               id: +targetId,
               name,
               sender_id: _from,
               receiver_id: _to,
               amount: _amount,
+              budget_id: _budget,
               note,
             });
             break;

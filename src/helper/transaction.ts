@@ -42,7 +42,15 @@ export async function deleteTransaction(id: number) {
 }
 
 export async function updateTransaction(transaction: Transaction['Update']) {
-  const { id, name, sender_id: senderId, receiver_id: receiverId, amount, note } = transaction;
+  const {
+    id,
+    name,
+    sender_id: senderId,
+    receiver_id: receiverId,
+    amount,
+    budget_id: budgetId,
+    note,
+  } = transaction;
 
   if (!id) {
     throw new Error("Transaction doesn't exist");
@@ -54,6 +62,7 @@ export async function updateTransaction(transaction: Transaction['Update']) {
     sender: senderId ?? undefined,
     receiver: receiverId ?? undefined,
     amount: amount ?? undefined,
+    budget: budgetId ?? undefined,
     note: note ?? undefined,
   });
 }
