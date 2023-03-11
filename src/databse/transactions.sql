@@ -5,6 +5,7 @@ create table public.transactions (
   receiver_id int8 references public.accounts on delete cascade,
   name text,
   amount numeric default 0,
+  budget_id int8 references public.budgets,
   note text,
   created_at date default now(),
 
@@ -61,18 +62,22 @@ create or replace function get_transactions(user_id text) returns table (
   receiver_id int8,
   name text,
   amount numeric,
+  budget_id int8,
   note text,
   created_at date,
   sender_name text,
-  receiver_name text
+  receiver_name text,
+  budget_name text
 ) as $$
 begin
-  return query select distinct t.*, acs.name as sender_name, acr.name as receiver_name
+  return query select distinct t.*, acs.name as sender_name, acr.name as receiver_name, b.name as budget_name
           from public.transactions t
           left join public.accounts acs
           on t.sender_id = acs.id
           left join public.accounts acr
           on t.receiver_id = acr.id
+          left join public.budgets b
+          on t.budget_id = b.id
           where acr.user_id = get_transactions.user_id::uuid or acs.user_id = get_transactions.user_id::uuid;
 end
 $$ language plpgsql;
