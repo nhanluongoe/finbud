@@ -18,37 +18,21 @@ export async function fetchTransactions(
 }
 
 export async function addTransaction(transaction: Transaction['Insert']) {
-  const { sender_id, receiver_id, amount, note } = transaction;
+  const { sender_id, receiver_id, amount, budget_id, note } = transaction;
 
-  const _amount = amount ?? 0;
-  const _note = note ?? '';
+  const _sender_id = sender_id ?? undefined;
+  const _receiver_id = receiver_id ?? undefined;
+  const _budget_id = budget_id ?? undefined;
+  const _amount = amount ?? undefined;
+  const _note = note ?? undefined;
 
-  if (receiver_id && sender_id) {
-    return await supabase.rpc('full_transaction', {
-      sender: sender_id,
-      receiver: receiver_id,
-      amount: _amount,
-      note: _note,
-    });
-  }
-
-  if (sender_id) {
-    return await supabase.rpc('out_transaction', {
-      sender: sender_id,
-      amount: _amount,
-      note: _note,
-    });
-  }
-
-  if (receiver_id) {
-    return await supabase.rpc('in_transaction', {
-      receiver: receiver_id,
-      amount: _amount,
-      note: _note,
-    });
-  }
-
-  throw new Error('Either sender or receiver must be present');
+  return await supabase.rpc('add_transaction', {
+    sender: _sender_id,
+    receiver: _receiver_id,
+    amount: _amount,
+    budget: _budget_id,
+    note: _note,
+  });
 }
 
 export async function deleteTransaction(id: number) {

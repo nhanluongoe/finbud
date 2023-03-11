@@ -57,6 +57,7 @@ export default function CommandLine() {
       setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['budgets']);
     },
     onError: (error) => {
       setError(error);
@@ -69,6 +70,7 @@ export default function CommandLine() {
       setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['budgets']);
     },
     onError: (error) => {
       setError(error);
@@ -153,13 +155,15 @@ export default function CommandLine() {
           case 't':
           case 'transaction': {
             setError(null);
-            const { from, to, amount = 0, note } = parseParams(params);
+            const { from, to, amount = 0, budget, note } = parseParams(params);
             const _to = to ? +to : null;
             const _from = from ? +from : null;
+            const _budget = budget ? +budget : null;
             addTransactionMutation.mutate({
               sender_id: _from,
               receiver_id: _to,
               amount: +amount,
+              budget_id: _budget,
               note,
             });
             break;
