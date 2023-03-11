@@ -305,7 +305,7 @@ export default function CommandLine() {
       <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
         <form onSubmit={handleSubmit} className='w-full'>
           <p className='text-gray-500 mb-1'>
-            Type &quot;help&quot; to show a quick introduction abount the commands!
+            Type &quot;help&quot; to show a quick introduction about the commands!
           </p>
           <div className='flex items-center w-full  rounded-md border-green-600 border py-1 px-2 bg-canvas-50 text-gray-600'>
             <span>
