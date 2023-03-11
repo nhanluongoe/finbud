@@ -1,4 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { IoIosArrowForward } from 'react-icons/io';
+
 import { parseParams } from '../../helper/parser';
 import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
@@ -299,17 +301,24 @@ export default function CommandLine() {
   }
 
   return (
-    <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0 bg-backdrop`}>
+    <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0`}>
       <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
         <form onSubmit={handleSubmit} className='w-full'>
-          <input
-            className='w-full block rounded-md border-slate-200 py-1 px-2 bg-canvas-50'
-            name='command'
-            ref={inputRef}
-            autoComplete='off'
-            // eslint-disable-next-line jsx-a11y/no-autofocus
-            autoFocus
-          ></input>
+          <p className='text-gray-500 mb-1'>
+            Type &quot;help&quot; to show a quick introduction abount the commands!
+          </p>
+          <div className='flex items-center w-full  rounded-md border-green-600 border py-1 px-2 bg-canvas-50 text-gray-600'>
+            <span>
+              <IoIosArrowForward />
+            </span>
+            <input
+              name='command'
+              ref={inputRef}
+              autoComplete='off'
+              // eslint-disable-next-line jsx-a11y/no-autofocus
+              autoFocus
+            ></input>
+          </div>
         </form>
       </div>
     </div>
