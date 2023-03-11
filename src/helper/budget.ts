@@ -17,7 +17,7 @@ export async function fetchBudgets() {
     .order('id', { ascending: true });
 }
 
-export async function addBudget(budget: Omit<Budget['Insert'], 'remaining, created_at'>) {
+export async function addBudget(budget: Omit<Budget['Insert'], 'remaining' | 'created_at'>) {
   return await supabase.from('budgets').insert({
     ...budget,
     remaining: budget.amount,
