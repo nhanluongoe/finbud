@@ -270,7 +270,6 @@ export default function CommandLine() {
             setError(null);
             const { name, amount } = parseParams(params);
             const _amount = amount ? +amount : null;
-            console.log(+targetId);
             updateBudgetMutation.mutate({
               id: +targetId,
               name,
