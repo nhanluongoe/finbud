@@ -102,6 +102,7 @@ export interface Database {
     Functions: {
       add_transaction: {
         Args: {
+          name?: string;
           sender?: number;
           receiver?: number;
           amount?: number;
@@ -142,6 +143,12 @@ export interface Database {
           receiver_name: string;
           budget_name: string;
         }[];
+      };
+      get_transactions_by_account: {
+        Args: {
+          id: number;
+        };
+        Returns: number;
       };
       in_transaction: {
         Args: {

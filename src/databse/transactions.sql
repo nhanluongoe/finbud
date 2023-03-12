@@ -71,7 +71,8 @@ begin
   return new_row;
 end
 $$ language plpgsql;
--- get
+
+-- get by user
 create or replace function get_transactions(user_id text) returns table (
   id int,
   sender_id int8,
@@ -95,6 +96,25 @@ begin
           left join public.budgets b
           on t.budget_id = b.id
           where acr.user_id = get_transactions.user_id::uuid or acs.user_id = get_transactions.user_id::uuid;
+end
+$$ language plpgsql;
+
+-- get by account
+create or replace function get_transactions_by_account(id int4)
+returns int4
+as $$
+declare
+  result int4;
+begin
+  select count(*) from public.transactions t
+  left join public.accounts acs
+  on t.sender_id = acs.id
+  left join public.accounts acr
+  on t.receiver_id = acr.id
+  where acr.id = get_transactions_by_account.id or acs.id = get_transactions_by_account.id
+  into result;
+
+  return result;
 end
 $$ language plpgsql;
 

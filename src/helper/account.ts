@@ -28,6 +28,16 @@ export async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {
 }
 
 export async function deleteAccount(id: number) {
+  const { data: transactionsInAccount } = await supabase.rpc('get_transactions_by_account', {
+    id,
+  });
+
+  if (typeof transactionsInAccount === 'number' && transactionsInAccount > 0) {
+    throw new Error(
+      "There're transactions attached to this account, please remove those transactions first!",
+    );
+  }
+
   return await supabase.from('accounts').delete().eq('id', id);
 }
 
