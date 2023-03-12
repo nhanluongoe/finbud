@@ -28,28 +28,14 @@ export async function deleteBudget(id: number) {
   return await supabase.from('budgets').delete().eq('id', id);
 }
 
-//TODO: abstract this out to a postgres function
 export async function updateBudget(budget: Omit<Budget['Update'], 'remaining'>) {
-  const { data: currentBudget } = await supabase
-    .from('budgets')
-    .select()
-    .eq('id', budget.id)
-    .limit(1)
-    .single();
-
-  const currentRemaining = currentBudget?.remaining;
-  const currentAmount = currentBudget?.amount;
-
-  let updatedRemaining;
-  if (budget.amount && currentRemaining && currentAmount) {
-    updatedRemaining = currentRemaining + budget.amount - currentAmount;
+  if (!budget.id) {
+    throw new Error("Budget doesn't exist!");
   }
 
-  return await supabase
-    .from('budgets')
-    .update({
-      ...budget,
-      remaining: updatedRemaining,
-    })
-    .eq('id', budget.id);
+  return await supabase.rpc('update_budget', {
+    id: budget.id,
+    name: budget.name ?? undefined,
+    amount: budget.amount ?? undefined,
+  });
 }

@@ -177,6 +177,14 @@ export interface Database {
         };
         Returns: number;
       };
+      update_budget: {
+        Args: {
+          id: number;
+          name?: string;
+          amount?: number;
+        };
+        Returns: number;
+      };
       update_transaction: {
         Args: {
           id: number;

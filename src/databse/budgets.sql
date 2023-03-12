@@ -27,3 +27,23 @@ create policy "Enable insert for authenticated users only" on public.budgets for
 
 create policy "Enable delete for authenticated users only" on public.budgets for delete to authenticated using (true);
 
+-- Functions
+
+-- update
+create or replace function update_budget (
+  id int4,
+  name text default null,
+  amount numeric default null
+) returns int4
+as $$
+begin
+  update public.budgets b
+  set b.name = coalesce(update_budget.name, b.name),
+      b.amount = coalesce(update_budget.amount, b.amount),
+      b.remaining = b.remaining + coalesce(update_budget.amount, b.amount) - b.amount
+  where b.id = update_budget.id;
+
+  return id;
+end
+$$ language plpgsql;
+
