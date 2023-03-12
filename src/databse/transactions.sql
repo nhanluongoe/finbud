@@ -35,18 +35,19 @@ create policy "Enable delete for authenticated users only" public.transactions f
 
 -- add
 create or replace function add_transaction(
+  name text default null,
   sender bigint default null, 
   receiver bigint default null,
   amount numeric default 0,
   budget bigint default null,
-  note text default '',
+  note text default ''
 )
 returns int as $$
 declare
   new_row int8;
 begin
-  insert into public.transactions (sender_id, receiver_id, amount, budget_id, note)
-  values (add_transaction.sender, add_transaction.receiver, add_transaction.amount, add_transaction.budget, add_transaction.note)
+  insert into public.transactions (name, sender_id, receiver_id, amount, budget_id, note)
+  values (add_transaction.name, add_transaction.sender, add_transaction.receiver, add_transaction.amount, add_transaction.budget, add_transaction.note)
   returning id into new_row;
 
   if add_transaction.sender is not null then

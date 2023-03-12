@@ -18,8 +18,9 @@ export async function fetchTransactions(
 }
 
 export async function addTransaction(transaction: Transaction['Insert']) {
-  const { sender_id, receiver_id, amount, budget_id, note } = transaction;
+  const { name, sender_id, receiver_id, amount, budget_id, note } = transaction;
 
+  const _name = name ?? undefined;
   const _sender_id = sender_id ?? undefined;
   const _receiver_id = receiver_id ?? undefined;
   const _budget_id = budget_id ?? undefined;
@@ -27,6 +28,7 @@ export async function addTransaction(transaction: Transaction['Insert']) {
   const _note = note ?? undefined;
 
   return await supabase.rpc('add_transaction', {
+    name: _name,
     sender: _sender_id,
     receiver: _receiver_id,
     amount: _amount,
