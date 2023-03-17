@@ -348,6 +348,8 @@ export default function CommandLine() {
 
     const historyLength = history.length;
 
+    if (historyLength === 0) return;
+
     switch (e.key) {
       case 'ArrowUp': {
         if (historyCount.current < historyLength - 1) {
