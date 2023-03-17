@@ -6,6 +6,7 @@ import { Accounts } from './components';
 import Budgets from './components/Budgets';
 import CommandError from './components/CommandError';
 import Transactions from './components/Transactions';
+import CommandHistoryProvider from './context/CommandHistoryContext';
 
 import { supabase } from './lib/initSupabase';
 
@@ -29,7 +30,9 @@ function App() {
       <section>
         <Transactions />
       </section>
-      <CommandLine />
+      <CommandHistoryProvider>
+        <CommandLine />
+      </CommandHistoryProvider>
       <CommandError />
     </Layout>
   );

@@ -17,8 +17,11 @@ import {
   updateBudget,
   updateTransaction,
 } from '../../helper';
+import { useCommandHistory } from '../../context/CommandHistoryContext';
 
 export default function CommandLine() {
+  const { history, setHistory } = useCommandHistory();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -140,6 +143,9 @@ export default function CommandLine() {
       hideInput();
       return;
     }
+
+    // Add command to history
+    setHistory?.((history) => [...history, eventTarget.command.value]);
 
     const inputSplits = eventTarget.command.value.split(' ');
     const command = inputSplits[0];
@@ -316,7 +322,9 @@ export default function CommandLine() {
       switch (e.key) {
         case 'i': {
           setVisible(true);
+
           if (!inputRef.current) return;
+
           inputRef.current.value = '';
           inputRef.current.focus();
           break;
@@ -326,6 +334,49 @@ export default function CommandLine() {
   };
 
   useEventListener('keyup', focusInput);
+
+  /*
+   * Use up arrow or down arrow to retrive command history
+   * */
+  const historyCount = useRef<number>(-1);
+  const retrieveHistory = (e: any) => {
+    const isInputActive = inputRef.current === document.activeElement;
+
+    if (!isInputActive) return;
+
+    if (!inputRef.current) return;
+
+    const historyLength = history.length;
+
+    switch (e.key) {
+      case 'ArrowUp': {
+        if (historyCount.current < historyLength - 1) {
+          historyCount.current++;
+        }
+        const previousCommand = history[historyLength - 1 - historyCount.current];
+
+        inputRef.current.value = previousCommand;
+        break;
+      }
+      case 'ArrowDown': {
+        if (historyCount.current > 0) {
+          historyCount.current--;
+        }
+
+        if (historyCount.current < 0) return;
+
+        const nextCommand = history[historyLength - 1 - historyCount.current];
+
+        inputRef.current.value = nextCommand;
+        break;
+      }
+      default: {
+        historyCount.current = -1;
+      }
+    }
+  };
+
+  useEventListener('keyup', retrieveHistory);
 
   if (!visible) {
     return null;
