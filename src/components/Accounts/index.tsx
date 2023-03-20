@@ -65,64 +65,77 @@ export default function Accounts() {
 
   useEffect(() => {
     const inputSplits = command.split(' ');
-    const action = inputSplits[0].toLowerCase();
-    const target = inputSplits[1].toLowerCase();
+    const action = inputSplits[0]?.toLowerCase();
+    const target = inputSplits[1]?.toLowerCase();
 
-    if (action === 'n' || action === 'next') {
+    function handleNavigation(direction: 'next' | 'previous') {
       if (target === 'a' || target === 'account') {
-        setPage((page) => ++page);
+        setPage((page) => (direction === 'next' ? ++page : --page));
       }
-      return;
     }
 
-    if (action === 'p' || action === 'previous') {
-      if (target === 'a' || target === 'account') {
-        setPage((page) => --page);
-      }
-      return;
-    }
-
-    if (action === 'c' || action === 'create') {
+    function handleCreate() {
       const params = inputSplits.slice(2).join(' ');
 
-      if (target === 'a' || target === 'account') {
-        setError(null);
-        const { name, balance = 0 } = parseParams(params);
-        addAccountMutation.mutate({ name, balance: +balance });
+      if (target !== 'a' && target !== 'account') {
+        setError('Invalid create command!');
         return;
       }
-      setError('Invalid create command!');
-      return;
+
+      setError(null);
+      const { name, balance = 0 } = parseParams(params);
+      addAccountMutation.mutate({ name, balance: +balance });
     }
 
-    if (action === 'd' || action === 'delete') {
+    function handleDelete() {
       const targetId = inputSplits[2];
 
-      if (target === 'a' || target === 'account') {
-        setError(null);
-        deleteAccountMutation.mutate(+targetId);
+      if (target !== 'a' && target !== 'account') {
+        setError('Invalid delete command!');
         return;
       }
-      setError('Invalid delete command!');
-      return;
+
+      setError(null);
+      deleteAccountMutation.mutate(+targetId);
     }
 
-    if (action === 'u' || action === 'update') {
+    function handleUpdate() {
       const targetId = inputSplits[2];
       const params = inputSplits.slice(3).join(' ');
 
-      if (target === 'a' || target === 'account') {
-        setError(null);
-        const { name, balance } = parseParams(params);
-        updateAccountMutation.mutate({
-          id: +targetId,
-          name,
-          balance: balance === undefined ? balance : +balance,
-        });
+      if (target !== 'a' && target !== 'account') {
+        setError('Invalid update command!');
         return;
       }
-      setError('Invalid update command!');
-      return;
+
+      setError(null);
+      const { name, balance } = parseParams(params);
+      updateAccountMutation.mutate({
+        id: +targetId,
+        name,
+        balance: balance === undefined ? balance : +balance,
+      });
+    }
+
+    const actionHandlers: Record<string, VoidFunction> = {
+      n: () => handleNavigation('next'),
+      next: () => handleNavigation('next'),
+      p: () => handleNavigation('previous'),
+      previous: () => handleNavigation('previous'),
+      c: handleCreate,
+      create: handleCreate,
+      d: handleDelete,
+      delete: handleDelete,
+      u: handleUpdate,
+      update: handleUpdate,
+    };
+
+    const handler = actionHandlers[action];
+
+    if (handler) {
+      handler();
+    } else {
+      setError('Invalid command!');
     }
   }, [command]);
 
