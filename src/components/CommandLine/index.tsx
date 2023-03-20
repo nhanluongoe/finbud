@@ -59,9 +59,9 @@ export default function CommandLine() {
     mutationFn: addTransaction,
     onSuccess: () => {
       setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transactions'], { exact: true });
+      queryClient.invalidateQueries(['accounts'], { exact: true });
+      queryClient.invalidateQueries(['budgets'], { exact: true });
     },
     onError: (error) => {
       setError(error);
@@ -72,9 +72,9 @@ export default function CommandLine() {
     mutationFn: deleteTransaction,
     onSuccess: () => {
       setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transactions'], { exact: true });
+      queryClient.invalidateQueries(['accounts'], { exact: true });
+      queryClient.invalidateQueries(['budgets'], { exact: true });
     },
     onError: (error) => {
       setError(error);
@@ -85,9 +85,9 @@ export default function CommandLine() {
     mutationFn: updateTransaction,
     onSuccess: () => {
       setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transactions'], { exact: true });
+      queryClient.invalidateQueries(['accounts'], { exact: true });
+      queryClient.invalidateQueries(['budgets'], { exact: true });
     },
     onError: (error) => {
       setError(error);
