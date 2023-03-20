@@ -65,104 +65,64 @@ export default function Accounts() {
 
   useEffect(() => {
     const inputSplits = command.split(' ');
-    const action = inputSplits[0];
-    const target = inputSplits[1];
+    const action = inputSplits[0].toLowerCase();
+    const target = inputSplits[1].toLowerCase();
 
-    switch (action.toLowerCase()) {
-      case 'n':
-      case 'next': {
-        switch (target) {
-          case 'a':
-          case 'account': {
-            setPage((page) => ++page);
-            break;
-          }
-        }
-        break;
+    if (action === 'n' || action === 'next') {
+      if (target === 'a' || target === 'account') {
+        setPage((page) => ++page);
       }
-      case 'p':
-      case 'previous': {
-        switch (target) {
-          case 'a':
-          case 'account': {
-            setPage((page) => --page);
-            break;
-          }
-        }
-        break;
+      return;
+    }
+
+    if (action === 'p' || action === 'previous') {
+      if (target === 'a' || target === 'account') {
+        setPage((page) => --page);
       }
+      return;
+    }
 
-      // Crud
-      case 'c':
-      case 'create': {
-        // const target = inputSplits[1];
-        const params = inputSplits.slice(2).join(' ');
+    if (action === 'c' || action === 'create') {
+      const params = inputSplits.slice(2).join(' ');
 
-        switch (target) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            const { name, balance = 0 } = parseParams(params);
-            addAccountMutation.mutate({ name, balance: +balance });
-            break;
-          }
-          default:
-            setError('Invalid create command!');
-            break;
-        }
-        break;
+      if (target === 'a' || target === 'account') {
+        setError(null);
+        const { name, balance = 0 } = parseParams(params);
+        addAccountMutation.mutate({ name, balance: +balance });
+        return;
       }
+      setError('Invalid create command!');
+      return;
+    }
 
-      case 'd':
-      case 'delete': {
-        // const target = inputSplits[1];
-        const targetId = inputSplits[2];
+    if (action === 'd' || action === 'delete') {
+      const targetId = inputSplits[2];
 
-        switch (target.toLowerCase()) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            deleteAccountMutation.mutate(+targetId);
-            break;
-          }
-          default:
-            setError('Invalid delete command!');
-            break;
-        }
-        break;
+      if (target === 'a' || target === 'account') {
+        setError(null);
+        deleteAccountMutation.mutate(+targetId);
+        return;
       }
+      setError('Invalid delete command!');
+      return;
+    }
 
-      case 'u':
-      case 'update': {
-        // const target = inputSplits[1];
-        const targetId = inputSplits[2];
-        const params = inputSplits.slice(3).join(' ');
+    if (action === 'u' || action === 'update') {
+      const targetId = inputSplits[2];
+      const params = inputSplits.slice(3).join(' ');
 
-        switch (target) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            const { name, balance } = parseParams(params);
-            updateAccountMutation.mutate({
-              id: +targetId,
-              name,
-              balance: balance === undefined ? balance : +balance,
-            });
-            break;
-          }
-          default: {
-            setError('Invalid update command!');
-            break;
-          }
-        }
-        break;
+      if (target === 'a' || target === 'account') {
+        setError(null);
+        const { name, balance } = parseParams(params);
+        updateAccountMutation.mutate({
+          id: +targetId,
+          name,
+          balance: balance === undefined ? balance : +balance,
+        });
+        return;
       }
-
-      //TODO: handle error for each module by...
-      //updating error context
-      default:
-        setError('Invalid command!');
-        break;
+      setError('Invalid update command!');
+      return;
     }
   }, [command]);
 
