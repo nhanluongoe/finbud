@@ -1,12 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { IoIosArrowForward } from 'react-icons/io';
-
-import { parseParams } from '../../helper/parser';
 import { useRef, useState } from 'react';
+
 import useEventListener from '../../hooks/useEventLister';
 import { useError } from '../../context/ErrorContext';
 import { supabase } from '../../lib/initSupabase';
-import { addBudget, deleteBudget, updateBudget } from '../../helper';
 import { useCommandHistory } from '../../context/CommandHistoryContext';
 import { useSetCommand } from '../../context/CommandContext';
 
@@ -17,52 +14,7 @@ export default function CommandLine() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
-  const queryClient = useQueryClient();
   const { setError } = useError();
-
-  queryClient.setDefaultOptions({
-    queries: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
-    },
-    mutations: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
-    },
-  });
-
-  /**
-   * Budgets
-   **/
-
-  const addBudgetMutation = useMutation({
-    mutationFn: addBudget,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['budgets']);
-    },
-  });
-
-  const deleteBudgetMutation = useMutation({
-    mutationFn: deleteBudget,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['budgets']);
-    },
-  });
-
-  const updateBudgetMutation = useMutation({
-    mutationFn: updateBudget,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['budgets']);
-    },
-  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,76 +43,6 @@ export default function CommandLine() {
         await supabase.auth.signOut();
         break;
       }
-      // Crud
-      case 'c':
-      case 'create': {
-        const target = inputSplits[1];
-        const params = inputSplits.slice(2).join(' ');
-
-        switch (target) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            const { name, amount = 0 } = parseParams(params);
-            addBudgetMutation.mutate({
-              name,
-              amount: +amount,
-            });
-            break;
-          }
-          default:
-            setError('Invalid create command!');
-            break;
-        }
-        break;
-      }
-
-      case 'd':
-      case 'delete': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
-
-        switch (target.toLowerCase()) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            deleteBudgetMutation.mutate(+targetId);
-            break;
-          }
-          default:
-            setError('Invalid delete command!');
-            break;
-        }
-        break;
-      }
-
-      case 'u':
-      case 'update': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
-        const params = inputSplits.slice(3).join(' ');
-
-        switch (target) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            const { name, amount } = parseParams(params);
-            const _amount = amount ? +amount : null;
-            updateBudgetMutation.mutate({
-              id: +targetId,
-              name,
-              amount: _amount,
-            });
-            break;
-          }
-          default: {
-            setError('Invalid update command!');
-            break;
-          }
-        }
-        break;
-      }
-
       default:
         setError('Invalid command!');
         break;
