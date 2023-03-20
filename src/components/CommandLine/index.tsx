@@ -18,8 +18,11 @@ import {
   updateTransaction,
 } from '../../helper';
 import { useCommandHistory } from '../../context/CommandHistoryContext';
+import { useSetCommand } from '../../context/CommandContext';
 
 export default function CommandLine() {
+  const setCommand = useSetCommand();
+
   const { history, setHistory } = useCommandHistory();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,31 +46,6 @@ export default function CommandLine() {
       onError: (err) => {
         setError(err);
       },
-    },
-  });
-
-  /**
-   * Account
-   **/
-  const addAccountMutation = useMutation({
-    mutationFn: addAccount,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accounts'], { exact: true });
-    },
-  });
-
-  const deleteAccountMutation = useMutation({
-    mutationFn: deleteAccount,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accounts'], { exact: true });
-      queryClient.invalidateQueries(['transactions'], { exact: true });
-    },
-  });
-
-  const updateAccountMutation = useMutation({
-    mutationFn: updateAccount,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accounts'], { exact: true });
     },
   });
 
@@ -139,6 +117,8 @@ export default function CommandLine() {
       return;
     }
 
+    setCommand(eventTarget.command.value);
+
     // Add command to history
     setHistory?.((history) => [...history, eventTarget.command.value]);
 
@@ -158,13 +138,6 @@ export default function CommandLine() {
         const params = inputSplits.slice(2).join(' ');
 
         switch (target) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            const { name, balance = 0 } = parseParams(params);
-            addAccountMutation.mutate({ name, balance: +balance });
-            break;
-          }
           case 't':
           case 'transaction': {
             setError(null);
@@ -205,12 +178,6 @@ export default function CommandLine() {
         const targetId = inputSplits[2];
 
         switch (target.toLowerCase()) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            deleteAccountMutation.mutate(+targetId);
-            break;
-          }
           case 't':
           case 'transaction': {
             setError(null);
@@ -237,17 +204,6 @@ export default function CommandLine() {
         const params = inputSplits.slice(3).join(' ');
 
         switch (target) {
-          case 'a':
-          case 'account': {
-            setError(null);
-            const { name, balance } = parseParams(params);
-            updateAccountMutation.mutate({
-              id: +targetId,
-              name,
-              balance: balance === undefined ? balance : +balance,
-            });
-            break;
-          }
           case 't':
           case 'transaction': {
             setError(null);

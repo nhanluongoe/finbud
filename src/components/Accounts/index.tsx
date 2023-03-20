@@ -1,16 +1,142 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { RiBankCard2Fill } from 'react-icons/ri';
+import { useCommand } from '../../context/CommandContext';
+import { useError } from '../../context/ErrorContext';
 
-import { fetchAccounts, toCurrency } from '../../helper';
+import { addAccount, deleteAccount, fetchAccounts, toCurrency, updateAccount } from '../../helper';
+import { parseParams } from '../../helper/parser';
 
 export default function Accounts() {
+  const { setError } = useError();
+  const command = useCommand();
+  const queryClient = useQueryClient();
+
+  queryClient.setDefaultOptions({
+    queries: {
+      onSuccess: () => {
+        setError(null);
+      },
+      onError: (err) => {
+        setError(err);
+      },
+    },
+    mutations: {
+      onSuccess: () => {
+        setError(null);
+      },
+      onError: (err) => {
+        setError(err);
+      },
+    },
+  });
+
   const { data } = useQuery({
     queryKey: ['accounts'],
     queryFn: fetchAccounts,
     select: (data) => data.data,
     staleTime: 3 * 60 * 1000,
   });
+
+  const addAccountMutation = useMutation({
+    mutationFn: addAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['accounts']);
+    },
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: deleteAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['transactions']);
+    },
+  });
+
+  const updateAccountMutation = useMutation({
+    mutationFn: updateAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries(['accounts']);
+    },
+  });
+
+  useEffect(() => {
+    const inputSplits = command.split(' ');
+    const action = inputSplits[0];
+
+    switch (action.toLowerCase()) {
+      // Crud
+      case 'c':
+      case 'create': {
+        const target = inputSplits[1];
+        const params = inputSplits.slice(2).join(' ');
+
+        switch (target) {
+          case 'a':
+          case 'account': {
+            setError(null);
+            const { name, balance = 0 } = parseParams(params);
+            addAccountMutation.mutate({ name, balance: +balance });
+            break;
+          }
+          default:
+            setError('Invalid create command!');
+            break;
+        }
+        break;
+      }
+
+      case 'd':
+      case 'delete': {
+        const target = inputSplits[1];
+        const targetId = inputSplits[2];
+
+        switch (target.toLowerCase()) {
+          case 'a':
+          case 'account': {
+            setError(null);
+            deleteAccountMutation.mutate(+targetId);
+            break;
+          }
+          default:
+            setError('Invalid delete command!');
+            break;
+        }
+        break;
+      }
+
+      case 'u':
+      case 'update': {
+        const target = inputSplits[1];
+        const targetId = inputSplits[2];
+        const params = inputSplits.slice(3).join(' ');
+
+        switch (target) {
+          case 'a':
+          case 'account': {
+            setError(null);
+            const { name, balance } = parseParams(params);
+            updateAccountMutation.mutate({
+              id: +targetId,
+              name,
+              balance: balance === undefined ? balance : +balance,
+            });
+            break;
+          }
+          default: {
+            setError('Invalid update command!');
+            break;
+          }
+        }
+        break;
+      }
+
+      default:
+        setError('Invalid command!');
+        break;
+    }
+  }, [command]);
 
   if (!data) return null;
 

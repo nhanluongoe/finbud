@@ -6,17 +6,20 @@ import App from './App';
 
 import { supabase } from './lib/initSupabase';
 import { queryClient } from './lib/initReactQuery';
+import ErrorProvider from './context/ErrorContext';
+import CommandProvider from './context/CommandContext';
 
 import './styles/index.css';
-import ErrorProvider from './context/ErrorContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <SessionContextProvider supabaseClient={supabase}>
       <QueryClientProvider client={queryClient}>
-        <ErrorProvider>
-          <App />
-        </ErrorProvider>
+        <CommandProvider>
+          <ErrorProvider>
+            <App />
+          </ErrorProvider>
+        </CommandProvider>
       </QueryClientProvider>
     </SessionContextProvider>
   </React.StrictMode>,
