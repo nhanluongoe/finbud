@@ -32,9 +32,11 @@ export default function Accounts() {
     },
   });
 
+  const [page, setPage] = useState(0);
+
   const { data } = useQuery({
-    queryKey: ['accounts'],
-    queryFn: fetchAccounts,
+    queryKey: ['accounts', page],
+    queryFn: () => fetchAccounts(page),
     select: (data) => data.data,
     staleTime: 3 * 60 * 1000,
   });
@@ -64,12 +66,36 @@ export default function Accounts() {
   useEffect(() => {
     const inputSplits = command.split(' ');
     const action = inputSplits[0];
+    const target = inputSplits[1];
 
     switch (action.toLowerCase()) {
+      case 'n':
+      case 'next': {
+        switch (target) {
+          case 'a':
+          case 'account': {
+            setPage((page) => ++page);
+            break;
+          }
+        }
+        break;
+      }
+      case 'p':
+      case 'previous': {
+        switch (target) {
+          case 'a':
+          case 'account': {
+            setPage((page) => --page);
+            break;
+          }
+        }
+        break;
+      }
+
       // Crud
       case 'c':
       case 'create': {
-        const target = inputSplits[1];
+        // const target = inputSplits[1];
         const params = inputSplits.slice(2).join(' ');
 
         switch (target) {
@@ -89,7 +115,7 @@ export default function Accounts() {
 
       case 'd':
       case 'delete': {
-        const target = inputSplits[1];
+        // const target = inputSplits[1];
         const targetId = inputSplits[2];
 
         switch (target.toLowerCase()) {
@@ -108,7 +134,7 @@ export default function Accounts() {
 
       case 'u':
       case 'update': {
-        const target = inputSplits[1];
+        // const target = inputSplits[1];
         const targetId = inputSplits[2];
         const params = inputSplits.slice(3).join(' ');
 
@@ -132,6 +158,8 @@ export default function Accounts() {
         break;
       }
 
+      //TODO: handle error for each module by...
+      //updating error context
       default:
         setError('Invalid command!');
         break;

@@ -1,7 +1,7 @@
 import { supabase } from '../lib/initSupabase';
 import { Account } from '../types';
 
-export async function fetchAccounts() {
+export async function fetchAccounts(page = 0, size = 5) {
   const session = await supabase.auth.getSession();
   const userId = session.data.session?.user.id;
 
@@ -9,7 +9,8 @@ export async function fetchAccounts() {
     .from('accounts')
     .select()
     .eq('user_id', userId)
-    .order('id', { ascending: true });
+    .order('id', { ascending: true })
+    .range(page * size, (page + 1) * size);
 }
 
 export async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {
