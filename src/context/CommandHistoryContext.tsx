@@ -20,8 +20,6 @@ export default function CommandHistoryProvider(props: { children: ReactNode }) {
     setHistory,
   };
 
-  console.log(history);
-
   return (
     <CommandHistoryContext.Provider value={context}>{children}</CommandHistoryContext.Provider>
   );
