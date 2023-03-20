@@ -6,17 +6,7 @@ import { useRef, useState } from 'react';
 import useEventListener from '../../hooks/useEventLister';
 import { useError } from '../../context/ErrorContext';
 import { supabase } from '../../lib/initSupabase';
-import {
-  addAccount,
-  addBudget,
-  addTransaction,
-  deleteAccount,
-  deleteBudget,
-  deleteTransaction,
-  updateAccount,
-  updateBudget,
-  updateTransaction,
-} from '../../helper';
+import { addBudget, deleteBudget, updateBudget } from '../../helper';
 import { useCommandHistory } from '../../context/CommandHistoryContext';
 import { useSetCommand } from '../../context/CommandContext';
 
@@ -46,36 +36,6 @@ export default function CommandLine() {
       onError: (err) => {
         setError(err);
       },
-    },
-  });
-
-  /**
-   * Transaction
-   **/
-  const addTransactionMutation = useMutation({
-    mutationFn: addTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['transactions'], { exact: true });
-      queryClient.invalidateQueries(['accounts'], { exact: true });
-      queryClient.invalidateQueries(['budgets'], { exact: true });
-    },
-  });
-
-  const deleteTransactionMutation = useMutation({
-    mutationFn: deleteTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['transactions'], { exact: true });
-      queryClient.invalidateQueries(['accounts'], { exact: true });
-      queryClient.invalidateQueries(['budgets'], { exact: true });
-    },
-  });
-
-  const updateTransactionMutation = useMutation({
-    mutationFn: updateTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['transactions'], { exact: true });
-      queryClient.invalidateQueries(['accounts'], { exact: true });
-      queryClient.invalidateQueries(['budgets'], { exact: true });
     },
   });
 
@@ -138,23 +98,6 @@ export default function CommandLine() {
         const params = inputSplits.slice(2).join(' ');
 
         switch (target) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            const { name, from, to, amount = 0, budget, note } = parseParams(params);
-            const _to = to ? +to : null;
-            const _from = from ? +from : null;
-            const _budget = budget ? +budget : null;
-            addTransactionMutation.mutate({
-              name,
-              sender_id: _from,
-              receiver_id: _to,
-              amount: +amount,
-              budget_id: _budget,
-              note,
-            });
-            break;
-          }
           case 'b':
           case 'budget': {
             setError(null);
@@ -178,12 +121,6 @@ export default function CommandLine() {
         const targetId = inputSplits[2];
 
         switch (target.toLowerCase()) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            deleteTransactionMutation.mutate(+targetId);
-            break;
-          }
           case 'b':
           case 'budget': {
             setError(null);
@@ -204,25 +141,6 @@ export default function CommandLine() {
         const params = inputSplits.slice(3).join(' ');
 
         switch (target) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            const { name, from, to, amount, budget, note } = parseParams(params);
-            const _from = from ? +from : null;
-            const _to = to ? +to : null;
-            const _amount = amount ? +amount : null;
-            const _budget = budget ? +budget : null;
-            updateTransactionMutation.mutate({
-              id: +targetId,
-              name,
-              sender_id: _from,
-              receiver_id: _to,
-              amount: _amount,
-              budget_id: _budget,
-              note,
-            });
-            break;
-          }
           case 'b':
           case 'budget': {
             setError(null);
