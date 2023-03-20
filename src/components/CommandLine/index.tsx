@@ -27,6 +27,25 @@ export default function CommandLine() {
   const queryClient = useQueryClient();
   const { setError } = useError();
 
+  queryClient.setDefaultOptions({
+    queries: {
+      onSuccess: () => {
+        setError(null);
+      },
+      onError: (err) => {
+        setError(err);
+      },
+    },
+    mutations: {
+      onSuccess: () => {
+        setError(null);
+      },
+      onError: (err) => {
+        setError(err);
+      },
+    },
+  });
+
   /**
    * Account
    **/
@@ -58,39 +77,27 @@ export default function CommandLine() {
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['transactions'], { exact: true });
       queryClient.invalidateQueries(['accounts'], { exact: true });
       queryClient.invalidateQueries(['budgets'], { exact: true });
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
   const deleteTransactionMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['transactions'], { exact: true });
       queryClient.invalidateQueries(['accounts'], { exact: true });
       queryClient.invalidateQueries(['budgets'], { exact: true });
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
   const updateTransactionMutation = useMutation({
     mutationFn: updateTransaction,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['transactions'], { exact: true });
       queryClient.invalidateQueries(['accounts'], { exact: true });
       queryClient.invalidateQueries(['budgets'], { exact: true });
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
@@ -101,33 +108,21 @@ export default function CommandLine() {
   const addBudgetMutation = useMutation({
     mutationFn: addBudget,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['budgets']);
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
   const deleteBudgetMutation = useMutation({
     mutationFn: deleteBudget,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['budgets']);
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
   const updateBudgetMutation = useMutation({
     mutationFn: updateBudget,
     onSuccess: () => {
-      setError(null);
       queryClient.invalidateQueries(['budgets']);
-    },
-    onError: (error) => {
-      setError(error);
     },
   });
 
