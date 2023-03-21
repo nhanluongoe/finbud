@@ -53,83 +53,72 @@ export default function Budgets() {
   });
 
   useEffect(() => {
-    const inputSplits = command.split(' ');
+    const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
+    const target = inputSplits[1];
 
-    switch (action.toLowerCase()) {
-      // Crud
-      case 'c':
-      case 'create': {
-        const target = inputSplits[1];
-        const params = inputSplits.slice(2).join(' ');
+    function handleCreate() {
+      const params = inputSplits.slice(2).join(' ');
 
-        switch (target) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            const { name, amount = 0 } = parseParams(params);
-            addBudgetMutation.mutate({
-              name,
-              amount: +amount,
-            });
-            break;
-          }
-          default:
-            setError('Invalid create command!');
-            break;
-        }
-        break;
+      if (target !== 'b' && target !== 'budget') {
+        setError('Invalid create command!');
+        return;
       }
 
-      case 'd':
-      case 'delete': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
+      setError(null);
+      const { name, amount = 0 } = parseParams(params);
+      addBudgetMutation.mutate({
+        name,
+        amount: +amount,
+      });
+    }
 
-        switch (target.toLowerCase()) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            deleteBudgetMutation.mutate(+targetId);
-            break;
-          }
-          default:
-            setError('Invalid delete command!');
-            break;
-        }
-        break;
+    function handleDelete() {
+      const targetId = inputSplits[2];
+
+      if (target !== 'b' && target !== 'budget') {
+        setError('Invalid delete command!');
+        return;
       }
 
-      case 'u':
-      case 'update': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
-        const params = inputSplits.slice(3).join(' ');
+      setError(null);
+      deleteBudgetMutation.mutate(+targetId);
+    }
 
-        switch (target) {
-          case 'b':
-          case 'budget': {
-            setError(null);
-            const { name, amount } = parseParams(params);
-            const _amount = amount ? +amount : null;
-            updateBudgetMutation.mutate({
-              id: +targetId,
-              name,
-              amount: _amount,
-            });
-            break;
-          }
-          default: {
-            setError('Invalid update command!');
-            break;
-          }
-        }
-        break;
+    function handleUpdate() {
+      const targetId = inputSplits[2];
+      const params = inputSplits.slice(3).join(' ');
+
+      if (target !== 'b' && target !== 'budget') {
+        setError('Invalid update command!');
+        return;
       }
 
-      default:
-        setError('Invalid command!');
-        break;
+      setError(null);
+      const { name, amount } = parseParams(params);
+      const _amount = amount ? +amount : null;
+      updateBudgetMutation.mutate({
+        id: +targetId,
+        name,
+        amount: _amount,
+      });
+    }
+
+    const actionHandlers: Record<string, VoidFunction> = {
+      c: handleCreate,
+      create: handleCreate,
+      d: handleDelete,
+      delete: handleDelete,
+      u: handleUpdate,
+      update: handleUpdate,
+    };
+
+    const handler = actionHandlers[action];
+
+    if (handler) {
+      handler();
+    } else {
+      setError('Invalid command!');
     }
   }, [command]);
 
