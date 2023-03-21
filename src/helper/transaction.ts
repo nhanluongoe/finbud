@@ -4,36 +4,51 @@ import { Database } from '../lib/schema';
 import { Transaction } from '../types';
 
 export async function fetchTransactions(
-  userId: string | undefined,
+  page = 0,
+  pageSize = 20,
 ): Promise<
   PostgrestSingleResponse<Database['public']['Functions']['get_transactions']['Returns']>
 > {
+  const session = await supabase.auth.getSession();
+  const userId = session.data.session?.user.id;
+
   if (!userId) {
     throw new Error("User doesn't exist");
   }
 
   return await supabase
     .rpc('get_transactions', { user_id: userId })
+    .range(page * pageSize, (page + 1) * pageSize)
     .order('id', { ascending: true });
+}
+
+export async function fetchTransactionCounts() {
+  const session = await supabase.auth.getSession();
+  const userId = session.data.session?.user.id;
+
+  if (!userId) {
+    throw new Error("User doesn't exist");
+  }
+
+  const transactions = await supabase.rpc('get_transactions', { user_id: userId });
+
+  if (!transactions.data) {
+    return 0;
+  }
+
+  return transactions.data.length;
 }
 
 export async function addTransaction(transaction: Transaction['Insert']) {
   const { name, sender_id, receiver_id, amount, budget_id, note } = transaction;
 
-  const _name = name ?? undefined;
-  const _sender_id = sender_id ?? undefined;
-  const _receiver_id = receiver_id ?? undefined;
-  const _budget_id = budget_id ?? undefined;
-  const _amount = amount ?? undefined;
-  const _note = note ?? undefined;
-
   return await supabase.rpc('add_transaction', {
-    name: _name,
-    sender: _sender_id,
-    receiver: _receiver_id,
-    amount: _amount,
-    budget: _budget_id,
-    note: _note,
+    name: name ?? undefined,
+    sender: sender_id ?? undefined,
+    receiver: receiver_id ?? undefined,
+    amount: amount ?? undefined,
+    budget: budget_id ?? undefined,
+    note: note ?? undefined,
   });
 }
 

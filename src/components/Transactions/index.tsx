@@ -1,4 +1,3 @@
-import { useSession } from '@supabase/auth-helpers-react';
 import { BiTransfer, BiNote } from 'react-icons/bi';
 import { BsArrowDownLeft, BsArrowUpRight } from 'react-icons/bs';
 import { MdNumbers, MdOutlineDateRange, MdTextFormat } from 'react-icons/md';
@@ -7,24 +6,28 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addTransaction,
   deleteTransaction,
+  fetchTransactionCounts,
   fetchTransactions,
   updateTransaction,
 } from '../../helper/transaction';
 import { toCurrency } from '../../helper';
 import { useError } from '../../context/ErrorContext';
 import { useCommand } from '../../context/CommandContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
+import Pagination from '../Pagination';
+
+const PAGE_SIZE = 20;
 
 export default function Transactions() {
-  const session = useSession();
-  const user = session?.user;
-
   const { setError } = useError();
   const command = useCommand();
   const queryClient = useQueryClient();
 
   queryClient.setDefaultOptions({
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    },
     mutations: {
       onSuccess: () => {
         setError(null);
@@ -35,14 +38,19 @@ export default function Transactions() {
     },
   });
 
-  // TODO: fetchTransaction shouldn't need userid from FE ...
-  // it could have gotten from BE directly
+  const [page, setPage] = useState(0);
+
   const data = useQuery({
-    queryKey: ['transactions'],
-    queryFn: async () => await fetchTransactions(user?.id),
+    queryKey: ['transactions', page],
+    queryFn: () => fetchTransactions(page, PAGE_SIZE),
     select: (res) => res.data,
-    staleTime: 5 * 60 * 1000,
   });
+
+  const { data: transactionCounts } = useQuery({
+    queryKey: ['transaction-counts'],
+    queryFn: fetchTransactionCounts,
+  });
+  const totalPages = Math.ceil((transactionCounts ?? 0) / PAGE_SIZE);
 
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
@@ -75,6 +83,20 @@ export default function Transactions() {
     const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
     const target = inputSplits[1];
+
+    function handleNavigation(direction: 'next' | 'previous') {
+      if (target === 't' || target === 'transaction') {
+        setPage((page) => {
+          if (page === 0 && direction === 'previous') {
+            return page;
+          }
+          if (page === totalPages - 1 && direction === 'next') {
+            return page;
+          }
+          return direction === 'next' ? ++page : --page;
+        });
+      }
+    }
 
     function handleCreate() {
       const params = inputSplits.slice(2).join(' ');
@@ -138,6 +160,10 @@ export default function Transactions() {
     }
 
     const actionHandlers: Record<string, VoidFunction> = {
+      n: () => handleNavigation('next'),
+      next: () => handleNavigation('next'),
+      p: () => handleNavigation('previous'),
+      previous: () => handleNavigation('previous'),
       c: handleCreate,
       create: handleCreate,
       d: handleDelete,
@@ -228,6 +254,7 @@ export default function Transactions() {
           ))}
         </tbody>
       </table>
+      <Pagination page={page} totalPages={totalPages} className='justify-end' />
     </section>
   );
 }
