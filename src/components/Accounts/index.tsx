@@ -57,9 +57,7 @@ export default function Accounts() {
     select: (data) => data.count,
     staleTime: Infinity,
   });
-  const totalPages = Math.floor((accountCounts ?? 0) / PAGE_SIZE);
-
-  console.log(accountCounts);
+  const totalPages = Math.ceil((accountCounts ?? 0) / PAGE_SIZE);
 
   const addAccountMutation = useMutation({
     mutationFn: addAccount,
@@ -90,7 +88,15 @@ export default function Accounts() {
 
     function handleNavigation(direction: 'next' | 'previous') {
       if (target === 'a' || target === 'account') {
-        setPage((page) => (direction === 'next' ? ++page : --page));
+        setPage((page) => {
+          if (page === 0 && direction === 'previous') {
+            return page;
+          }
+          if (page === totalPages - 1 && direction === 'next') {
+            return page;
+          }
+          return direction === 'next' ? ++page : --page;
+        });
       }
     }
 
