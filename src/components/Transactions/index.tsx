@@ -90,13 +90,12 @@ export default function Transactions() {
       }
 
       setPage((page) => {
-        if (page === 0 && direction === 'previous') {
-          return page;
-        }
-        if (page === totalPages - 1 && direction === 'next') {
-          return page;
-        }
-        return direction === 'next' ? ++page : --page;
+        const atFirstPageAndBack = page === 0 && direction === 'previous';
+        const atLastPageAndNext = page === totalPages - 1 && direction === 'next';
+
+        if (atFirstPageAndBack || atLastPageAndNext) return page;
+
+        return direction === 'next' ? page + 1 : page - 1;
       });
     }
 
