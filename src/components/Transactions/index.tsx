@@ -44,9 +44,6 @@ export default function Transactions() {
     staleTime: 5 * 60 * 1000,
   });
 
-  /**
-   * Transaction
-   **/
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
     onSuccess: () => {
@@ -75,97 +72,83 @@ export default function Transactions() {
   });
 
   useEffect(() => {
-    const inputSplits = command.split(' ');
+    const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
+    const target = inputSplits[1];
+    const targetId = inputSplits[2];
+    const params = inputSplits.slice(3).join(' ');
 
-    switch (action.toLowerCase()) {
-      // Crud
-      case 'c':
-      case 'create': {
-        const target = inputSplits[1];
-        const params = inputSplits.slice(2).join(' ');
-
-        switch (target) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            const { name, from, to, amount = 0, budget, note } = parseParams(params);
-            const _to = to ? +to : null;
-            const _from = from ? +from : null;
-            const _budget = budget ? +budget : null;
-            addTransactionMutation.mutate({
-              name,
-              sender_id: _from,
-              receiver_id: _to,
-              amount: +amount,
-              budget_id: _budget,
-              note,
-            });
-            break;
-          }
-          default:
-            setError('Invalid create command!');
-            break;
-        }
-        break;
+    function handleCreate() {
+      if (target !== 't' && target !== 'transaction') {
+        setError('Invalid create command!');
+        return;
       }
 
-      case 'd':
-      case 'delete': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
+      setError(null);
+      const { name, from, to, amount = 0, budget, note } = parseParams(params);
+      const _to = to ? +to : null;
+      const _from = from ? +from : null;
+      const _budget = budget ? +budget : null;
+      addTransactionMutation.mutate({
+        name,
+        sender_id: _from,
+        receiver_id: _to,
+        amount: +amount,
+        budget_id: _budget,
+        note,
+      });
+    }
 
-        switch (target.toLowerCase()) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            deleteTransactionMutation.mutate(+targetId);
-            break;
-          }
-          default:
-            setError('Invalid delete command!');
-            break;
-        }
-        break;
+    function handleDelete() {
+      const targetId = inputSplits[2];
+
+      if (target !== 't' && target !== 'transaction') {
+        setError('Invalid delete command!');
+        return;
       }
 
-      case 'u':
-      case 'update': {
-        const target = inputSplits[1];
-        const targetId = inputSplits[2];
-        const params = inputSplits.slice(3).join(' ');
+      setError(null);
+      deleteTransactionMutation.mutate(+targetId);
+    }
 
-        switch (target) {
-          case 't':
-          case 'transaction': {
-            setError(null);
-            const { name, from, to, amount, budget, note } = parseParams(params);
-            const _from = from ? +from : null;
-            const _to = to ? +to : null;
-            const _amount = amount ? +amount : null;
-            const _budget = budget ? +budget : null;
-            updateTransactionMutation.mutate({
-              id: +targetId,
-              name,
-              sender_id: _from,
-              receiver_id: _to,
-              amount: _amount,
-              budget_id: _budget,
-              note,
-            });
-            break;
-          }
-          default: {
-            setError('Invalid update command!');
-            break;
-          }
-        }
-        break;
+    function handleUpdate() {
+      if (target !== 't' && target !== 'transaction') {
+        setError('Invalid update command!');
+        return;
       }
 
-      default:
-        setError('Invalid command!');
-        break;
+      setError(null);
+      const { name, from, to, amount, budget, note } = parseParams(params);
+      const _from = from ? +from : null;
+      const _to = to ? +to : null;
+      const _amount = amount ? +amount : null;
+      const _budget = budget ? +budget : null;
+      updateTransactionMutation.mutate({
+        id: +targetId,
+        name,
+        sender_id: _from,
+        receiver_id: _to,
+        amount: _amount,
+        budget_id: _budget,
+        note,
+      });
+    }
+
+    const actionHandlers: Record<string, VoidFunction> = {
+      c: handleCreate,
+      create: handleCreate,
+      d: handleDelete,
+      delete: handleDelete,
+      u: handleUpdate,
+      update: handleUpdate,
+    };
+
+    const handler = actionHandlers[action];
+
+    if (handler) {
+      handler();
+    } else {
+      setError('Invalid command!');
     }
   }, [command]);
 
