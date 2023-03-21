@@ -85,17 +85,19 @@ export default function Transactions() {
     const target = inputSplits[1];
 
     function handleNavigation(direction: 'next' | 'previous') {
-      if (target === 't' || target === 'transaction') {
-        setPage((page) => {
-          if (page === 0 && direction === 'previous') {
-            return page;
-          }
-          if (page === totalPages - 1 && direction === 'next') {
-            return page;
-          }
-          return direction === 'next' ? ++page : --page;
-        });
+      if (target !== 't' && target !== 'transaction') {
+        return;
       }
+
+      setPage((page) => {
+        if (page === 0 && direction === 'previous') {
+          return page;
+        }
+        if (page === totalPages - 1 && direction === 'next') {
+          return page;
+        }
+        return direction === 'next' ? ++page : --page;
+      });
     }
 
     function handleCreate() {
