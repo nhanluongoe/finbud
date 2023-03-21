@@ -1,5 +1,6 @@
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import useEventListener from '../../hooks/useEventLister';
 import { useError } from '../../context/ErrorContext';
@@ -29,7 +30,10 @@ export default function CommandLine() {
       return;
     }
 
-    setCommand(eventTarget.command.value);
+    // add uuid to make command unique even if user enters...
+    // the same command consecutively to make useEffect that...
+    // have command as depenency always run on each command
+    setCommand(eventTarget.command.value + ` &uuid=${uuidv4()}`);
 
     // Add command to history
     setHistory?.((history) => [...history, eventTarget.command.value]);

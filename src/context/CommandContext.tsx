@@ -21,7 +21,7 @@ export default function CommandProvider(props: { children: ReactNode }) {
 
   const [command, setCommand] = useState<string>('');
 
-  // use two context here to reduce re-renders of consumsers in case ...
+  // use two contexts here to reduce re-renders of consumsers in case ...
   // a consumer only need "command" or "setCommand"
   return (
     <SetCommandContext.Provider value={{ setCommand }}>
