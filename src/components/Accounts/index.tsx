@@ -5,8 +5,18 @@ import { RiBankCard2Fill } from 'react-icons/ri';
 import { useCommand } from '../../context/CommandContext';
 import { useError } from '../../context/ErrorContext';
 
-import { addAccount, deleteAccount, fetchAccounts, toCurrency, updateAccount } from '../../helper';
+const PAGE_SIZE = 5;
+
+import {
+  addAccount,
+  deleteAccount,
+  fetchAccountCounts,
+  fetchAccounts,
+  toCurrency,
+  updateAccount,
+} from '../../helper';
 import { parseParams } from '../../helper/parser';
+import Pagination from '../Pagination';
 
 export default function Accounts() {
   const { setError } = useError();
@@ -36,10 +46,20 @@ export default function Accounts() {
 
   const { data } = useQuery({
     queryKey: ['accounts', page],
-    queryFn: () => fetchAccounts(page),
+    queryFn: () => fetchAccounts(page, PAGE_SIZE),
     select: (data) => data.data,
     staleTime: 3 * 60 * 1000,
   });
+
+  const { data: accountCounts } = useQuery({
+    queryKey: ['account-counts'],
+    queryFn: fetchAccountCounts,
+    select: (data) => data.count,
+    staleTime: Infinity,
+  });
+  const totalPages = Math.floor((accountCounts ?? 0) / PAGE_SIZE);
+
+  console.log(accountCounts);
 
   const addAccountMutation = useMutation({
     mutationFn: addAccount,
@@ -179,6 +199,7 @@ export default function Accounts() {
           ))}
         </tbody>
       </table>
+      <Pagination page={page} totalPages={totalPages} className='justify-end' />
     </section>
   );
 }
