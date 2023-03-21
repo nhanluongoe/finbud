@@ -13,7 +13,7 @@ export default function Pagination(props: IPaginationProps) {
 
   return (
     <section className={classNames(defaultClassName, className)}>
-      <span className='flex items-center justify-center rounded-full bg-green-200 w-4 h-4 mr-1'>
+      <span className='flex items-center justify-center rounded-full bg-gray-200 w-4 h-4 mr-1'>
         {page + 1}
       </span>{' '}
       <span>of {totalPages}</span>
