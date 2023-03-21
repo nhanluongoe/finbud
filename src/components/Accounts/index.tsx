@@ -64,9 +64,9 @@ export default function Accounts() {
   });
 
   useEffect(() => {
-    const inputSplits = command.split(' ');
-    const action = inputSplits[0]?.toLowerCase();
-    const target = inputSplits[1]?.toLowerCase();
+    const inputSplits = command.toLowerCase().split(' ');
+    const action = inputSplits[0];
+    const target = inputSplits[1];
 
     function handleNavigation(direction: 'next' | 'previous') {
       if (target === 'a' || target === 'account') {
