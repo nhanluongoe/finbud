@@ -75,10 +75,10 @@ export default function Transactions() {
     const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
     const target = inputSplits[1];
-    const targetId = inputSplits[2];
-    const params = inputSplits.slice(3).join(' ');
 
     function handleCreate() {
+      const params = inputSplits.slice(2).join(' ');
+
       if (target !== 't' && target !== 'transaction') {
         setError('Invalid create command!');
         return;
@@ -112,6 +112,9 @@ export default function Transactions() {
     }
 
     function handleUpdate() {
+      const targetId = inputSplits[2];
+      const params = inputSplits.slice(3).join(' ');
+
       if (target !== 't' && target !== 'transaction') {
         setError('Invalid update command!');
         return;
