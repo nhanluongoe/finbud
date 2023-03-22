@@ -19,7 +19,7 @@ export async function fetchTransactions(
   return await supabase
     .rpc('get_transactions', { user_id: userId })
     .range(page * pageSize, (page + 1) * pageSize)
-    .order('id', { ascending: true });
+    .order('created_at', { ascending: true });
 }
 
 export async function fetchTransactionCounts() {
