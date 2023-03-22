@@ -107,6 +107,7 @@ export interface Database {
           receiver?: number;
           amount?: number;
           budget?: number;
+          created_at?: string;
           note?: string;
         };
         Returns: number;

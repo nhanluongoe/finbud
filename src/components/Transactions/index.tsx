@@ -108,7 +108,7 @@ export default function Transactions() {
       }
 
       setError(null);
-      const { name, from, to, amount = 0, budget, note } = parseParams(params);
+      const { name, from, to, amount = 0, date = new Date(), budget, note } = parseParams(params);
       const _to = to ? +to : null;
       const _from = from ? +from : null;
       const _budget = budget ? +budget : null;
@@ -119,6 +119,7 @@ export default function Transactions() {
         amount: +amount,
         budget_id: _budget,
         note,
+        created_at: date.toString(),
       });
     }
 

@@ -40,7 +40,7 @@ export async function fetchTransactionCounts() {
 }
 
 export async function addTransaction(transaction: Transaction['Insert']) {
-  const { name, sender_id, receiver_id, amount, budget_id, note } = transaction;
+  const { name, sender_id, receiver_id, amount, budget_id, created_at, note } = transaction;
 
   return await supabase.rpc('add_transaction', {
     name: name ?? undefined,
@@ -49,6 +49,7 @@ export async function addTransaction(transaction: Transaction['Insert']) {
     amount: amount ?? undefined,
     budget: budget_id ?? undefined,
     note: note ?? undefined,
+    created_at: created_at ?? undefined,
   });
 }
 
