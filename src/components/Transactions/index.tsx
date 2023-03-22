@@ -16,6 +16,7 @@ import { useCommand } from '../../context/CommandContext';
 import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
+import useFilter from '../../hooks/useFilter';
 
 const PAGE_SIZE = 20;
 
@@ -39,10 +40,11 @@ export default function Transactions() {
   });
 
   const [page, setPage] = useState(0);
+  const { date, setMonth, setYear } = useFilter();
 
   const data = useQuery({
-    queryKey: ['transactions', page],
-    queryFn: () => fetchTransactions(page, PAGE_SIZE),
+    queryKey: ['transactions', page, date.month, date.year],
+    queryFn: () => fetchTransactions(page, PAGE_SIZE, date.month, date.year),
     select: (res) => res.data,
   });
 
@@ -83,6 +85,23 @@ export default function Transactions() {
     const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
     const target = inputSplits[1];
+
+    function handleFilter() {
+      if (target !== 't' && target !== 'transaction') {
+        return;
+      }
+
+      const params = inputSplits.slice(2).join(' ');
+      const { month, year } = parseParams(params);
+
+      if (month) {
+        setMonth(+month);
+      }
+
+      if (year) {
+        setYear(+year);
+      }
+    }
 
     function handleNavigation(direction: 'next' | 'previous') {
       if (target !== 't' && target !== 'transaction') {
@@ -163,6 +182,8 @@ export default function Transactions() {
     }
 
     const actionHandlers: Record<string, VoidFunction> = {
+      f: handleFilter,
+      filter: handleFilter,
       n: () => handleNavigation('next'),
       next: () => handleNavigation('next'),
       p: () => handleNavigation('previous'),

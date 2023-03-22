@@ -6,6 +6,8 @@ import { Transaction } from '../types';
 export async function fetchTransactions(
   page = 0,
   pageSize = 20,
+  month: number,
+  year: number,
 ): Promise<
   PostgrestSingleResponse<Database['public']['Functions']['get_transactions']['Returns']>
 > {
@@ -16,8 +18,13 @@ export async function fetchTransactions(
     throw new Error("User doesn't exist");
   }
 
+  const startDate = `${year}-${month}-01T00:00:00.000Z`;
+  const endDate = `${year}-${month + 1}-01T00:00:00.000Z`;
+
   return await supabase
     .rpc('get_transactions', { user_id: userId })
+    .gte('created_at', startDate)
+    .lte('created_at', endDate)
     .range(page * pageSize, (page + 1) * pageSize)
     .order('created_at', { ascending: true });
 }
