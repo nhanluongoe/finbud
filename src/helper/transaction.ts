@@ -68,6 +68,7 @@ export async function updateTransaction(transaction: Transaction['Update']) {
     amount,
     budget_id: budgetId,
     note,
+    created_at,
   } = transaction;
 
   if (!id) {
@@ -82,5 +83,6 @@ export async function updateTransaction(transaction: Transaction['Update']) {
     amount: amount ?? undefined,
     budget: budgetId ?? undefined,
     note: note ?? undefined,
+    created_at: created_at ?? undefined,
   });
 }

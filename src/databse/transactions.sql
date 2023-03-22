@@ -161,20 +161,19 @@ create or replace function update_transaction(
   receiver int8 DEFAULT NULL, 
   amount numeric DEFAULT NULL, 
   budget int8 DEFAULT null,
+  created_at date default null,
   note text DEFAULT NULL
 ) returns int as $$
 declare
   -- values of current transaction
-  c_name text;
   c_s_id int8;
   c_r_id int8;
   c_amt numeric;
   c_b_id int8;
-  c_note text;
 begin
-  select t.name, t.sender_id, t.receiver_id, t.amount, t.budget_id, t.note from public.transactions t
+  select  t.sender_id, t.receiver_id, t.amount, t.budget_id from public.transactions t
   where t.id = update_transaction.id
-  into c_name, c_s_id, c_r_id, c_amt, c_b_id, c_note;
+  into c_s_id, c_r_id, c_amt, c_b_id;
 
   if c_s_id is not null then
     update public.accounts a
@@ -212,7 +211,8 @@ begin
       receiver_id = COALESCE(update_transaction.receiver, t.receiver_id),
       amount = COALESCE(update_transaction.amount, t.amount),
       budget_id = COALESCE(update_transaction.budget, t.budget_id),
-      note = COALESCE(update_transaction.note, t.note)
+      note = COALESCE(update_transaction.note, t.note),
+      created_at = COALESCE(update_transaction.created_at, t.created_at)
   where t.id = update_transaction.id;
 
   return update_transaction.id;
