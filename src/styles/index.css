@@ -36,4 +36,8 @@
   .card {
     @apply p-4 bg-canvas-50 rounded-md shadow-canvas-300 drop-shadow-md border-t-2 border-t-green-600;
   }
+
+  .chip {
+    @apply border rounded-3xl px-3 py-1 border-blue-400 text-blue-400 bg-blue-50;
+  }
 }
