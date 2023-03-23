@@ -2,11 +2,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { BsBox } from 'react-icons/bs';
 
-import { addBudget, deleteBudget, fetchBudgets, toCurrency, updateBudget } from '../../helper';
+import {
+  addBudget,
+  deleteBudget,
+  fetchBudgetCounts,
+  fetchBudgets,
+  toCurrency,
+  updateBudget,
+} from '../../helper';
 import { useError } from '../../context/ErrorContext';
 import { useCommand } from '../../context/CommandContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
+import Pagination from '../Pagination';
+
+const PAGE_SIZE = 2;
 
 export default function Budgets() {
   const { setError } = useError();
@@ -24,12 +34,23 @@ export default function Budgets() {
     },
   });
 
+  const [page, setPage] = useState(0);
+
   const { data } = useQuery({
     queryKey: ['budgets'],
-    queryFn: fetchBudgets,
+    queryFn: () => fetchBudgets(page, PAGE_SIZE),
     select: (data) => data.data,
     staleTime: 5 * 60 * 1000,
   });
+
+  const { data: budgetCounts } = useQuery({
+    queryKey: ['budget-counts'],
+    queryFn: fetchBudgetCounts,
+    select: (data) => data.count,
+  });
+  const totalPages = Math.ceil((budgetCounts ?? 0) / PAGE_SIZE);
+
+  console.log({ data });
 
   const addBudgetMutation = useMutation({
     mutationFn: addBudget,
@@ -169,6 +190,7 @@ export default function Budgets() {
           ))}
         </tbody>
       </table>
+      <Pagination page={page} totalPages={totalPages} className='justify-end' />
     </section>
   );
 }

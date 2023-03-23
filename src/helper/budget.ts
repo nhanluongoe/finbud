@@ -2,7 +2,7 @@ import { supabase } from '../lib/initSupabase';
 import { Budget } from '../types';
 import { getUserId } from './auth';
 
-export async function fetchBudgets() {
+export async function fetchBudgets(page = 0, pageSize = 5) {
   const userId = await getUserId();
 
   const now = new Date();
@@ -18,7 +18,8 @@ export async function fetchBudgets() {
     .eq('user_id', userId)
     .gte('created_at', startDate)
     .lte('created_at', endDate)
-    .order('id', { ascending: true });
+    .order('id', { ascending: true })
+    .range(page * pageSize, (page + 1) * pageSize - 1);
 }
 
 export async function addBudget(
@@ -47,4 +48,13 @@ export async function updateBudget(budget: Omit<Budget['Update'], 'remaining'>) 
     name: budget.name ?? undefined,
     amount: budget.amount ?? undefined,
   });
+}
+
+export async function fetchBudgetCounts() {
+  const userId = await getUserId();
+
+  return await supabase
+    .from('budgets')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId);
 }
