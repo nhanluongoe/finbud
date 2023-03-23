@@ -50,8 +50,8 @@ export default function Transactions() {
   });
 
   const { data: transactionCounts } = useQuery({
-    queryKey: ['transaction-counts'],
-    queryFn: fetchTransactionCounts,
+    queryKey: ['transaction-counts', date.month, date.year],
+    queryFn: () => fetchTransactionCounts(date.month, date.year),
   });
   const totalPages = Math.ceil((transactionCounts ?? 0) / PAGE_SIZE);
 

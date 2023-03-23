@@ -29,7 +29,7 @@ export async function fetchTransactions(
     .order('created_at', { ascending: true });
 }
 
-export async function fetchTransactionCounts() {
+export async function fetchTransactionCounts(month: number, year: number) {
   const session = await supabase.auth.getSession();
   const userId = session.data.session?.user.id;
 
@@ -37,7 +37,13 @@ export async function fetchTransactionCounts() {
     throw new Error("User doesn't exist");
   }
 
-  const transactions = await supabase.rpc('get_transactions', { user_id: userId });
+  const startDate = `${year}-${month}-01T00:00:00.000Z`;
+  const endDate = `${year}-${month + 1}-01T00:00:00.000Z`;
+
+  const transactions = await supabase
+    .rpc('get_transactions', { user_id: userId })
+    .gte('created_at', startDate)
+    .lte('created_at', endDate);
 
   if (!transactions.data) {
     return 0;
