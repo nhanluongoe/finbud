@@ -15,6 +15,8 @@ import { useCommand } from '../../context/CommandContext';
 import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
+import useFilter from '../../hooks/useFilter';
+import Filter from '../Filter';
 
 const PAGE_SIZE = 2;
 
@@ -35,22 +37,22 @@ export default function Budgets() {
   });
 
   const [page, setPage] = useState(0);
+  const { date, setMonth, setYear } = useFilter();
 
-  const { data } = useQuery({
-    queryKey: ['budgets', page],
-    queryFn: () => fetchBudgets(page, PAGE_SIZE),
+  const { data: budgets } = useQuery({
+    queryKey: ['budgets', page, date.month, date.year],
+    queryFn: () => fetchBudgets(page, PAGE_SIZE, date.month, date.year),
     select: (data) => data.data,
     staleTime: 5 * 60 * 1000,
   });
 
   const { data: budgetCounts } = useQuery({
-    queryKey: ['budget-counts'],
-    queryFn: fetchBudgetCounts,
+    queryKey: ['budget-counts', date.month, date.year],
+    queryFn: () => fetchBudgetCounts(date.month, date.year),
     select: (data) => data.count,
+    staleTime: 5 * 60 * 1000,
   });
   const totalPages = Math.ceil((budgetCounts ?? 0) / PAGE_SIZE);
-
-  console.log({ data });
 
   const addBudgetMutation = useMutation({
     mutationFn: addBudget,
@@ -77,6 +79,23 @@ export default function Budgets() {
     const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
     const target = inputSplits[1];
+
+    function handleFilter() {
+      if (target !== 'b' && target !== 'budget') {
+        return;
+      }
+
+      const params = inputSplits.slice(2).join(' ');
+      const { month, year } = parseParams(params);
+
+      if (month) {
+        setMonth(+month);
+      }
+
+      if (year) {
+        setYear(+year);
+      }
+    }
 
     function handleNavigation(direction: 'next' | 'previous') {
       if (target !== 'b' && target !== 'budget') {
@@ -141,6 +160,8 @@ export default function Budgets() {
     }
 
     const actionHandlers: Record<string, VoidFunction> = {
+      f: handleFilter,
+      filter: handleFilter,
       n: () => handleNavigation('next'),
       next: () => handleNavigation('next'),
       p: () => handleNavigation('previous'),
@@ -162,17 +183,20 @@ export default function Budgets() {
     }
   }, [command]);
 
-  if (!data) return null;
+  if (!budgets) return null;
 
   return (
     <section className='card'>
-      <div className='text-green-600 flex items-center mb-2 p-2'>
-        <span className='mr-2'>
-          <i className='text-2xl'>
-            <BsBox />
-          </i>
-        </span>
-        <h1 className='m-0 font-bold'>Budgets</h1>
+      <div className='flex items-center mb-2 p-2'>
+        <div className='text-green-600 flex items-center'>
+          <span className='mr-2'>
+            <i className='text-2xl'>
+              <BsBox />
+            </i>
+          </span>
+          <h1 className='m-0 font-bold'>Budgets</h1>
+        </div>
+        <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
       <table>
         <thead>
@@ -199,7 +223,7 @@ export default function Budgets() {
           </tr>
         </thead>
         <tbody>
-          {data.map((budget) => (
+          {budgets.map((budget) => (
             <tr key={budget.id}>
               <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
               <td>{budget.name}</td>

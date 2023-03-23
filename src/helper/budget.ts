@@ -2,15 +2,11 @@ import { supabase } from '../lib/initSupabase';
 import { Budget } from '../types';
 import { getUserId } from './auth';
 
-export async function fetchBudgets(page = 0, pageSize = 5) {
+export async function fetchBudgets(page = 0, pageSize = 5, month: number, year: number) {
   const userId = await getUserId();
 
-  const now = new Date();
-  const currentMonth = now.getMonth() + 1;
-  const currentYear = now.getFullYear();
-
-  const startDate = `${currentYear}-${currentMonth}-01T00:00:00.000Z`;
-  const endDate = `${currentYear}-${currentMonth + 1}-01T00:00:00.000Z`;
+  const startDate = `${year}-${month}-01T00:00:00.000Z`;
+  const endDate = `${year}-${month + 1}-01T00:00:00.000Z`;
 
   return await supabase
     .from('budgets')
@@ -50,11 +46,16 @@ export async function updateBudget(budget: Omit<Budget['Update'], 'remaining'>) 
   });
 }
 
-export async function fetchBudgetCounts() {
+export async function fetchBudgetCounts(month: number, year: number) {
   const userId = await getUserId();
+
+  const startDate = `${year}-${month}-01T00:00:00.000Z`;
+  const endDate = `${year}-${month + 1}-01T00:00:00.000Z`;
 
   return await supabase
     .from('budgets')
     .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId);
+    .eq('user_id', userId)
+    .gte('created_at', startDate)
+    .lte('created_at', endDate);
 }
