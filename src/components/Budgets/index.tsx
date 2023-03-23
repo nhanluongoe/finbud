@@ -26,6 +26,9 @@ export default function Budgets() {
   const queryClient = useQueryClient();
 
   queryClient.setDefaultOptions({
+    queries: {
+      staleTime: Infinity,
+    },
     mutations: {
       onSuccess: () => {
         setError(null);
@@ -43,14 +46,12 @@ export default function Budgets() {
     queryKey: ['budgets', page, date.month, date.year],
     queryFn: () => fetchBudgets(page, PAGE_SIZE, date.month, date.year),
     select: (data) => data.data,
-    staleTime: 5 * 60 * 1000,
   });
 
   const { data: budgetCounts } = useQuery({
     queryKey: ['budget-counts', date.month, date.year],
     queryFn: () => fetchBudgetCounts(date.month, date.year),
     select: (data) => data.count,
-    staleTime: 5 * 60 * 1000,
   });
   const totalPages = Math.ceil((budgetCounts ?? 0) / PAGE_SIZE);
 

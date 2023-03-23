@@ -28,7 +28,7 @@ export default function Transactions() {
 
   queryClient.setDefaultOptions({
     queries: {
-      staleTime: 5 * 60 * 1000,
+      staleTime: Infinity,
     },
     mutations: {
       onSuccess: () => {

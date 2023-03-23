@@ -25,12 +25,7 @@ export default function Accounts() {
 
   queryClient.setDefaultOptions({
     queries: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
+      staleTime: Infinity,
     },
     mutations: {
       onSuccess: () => {
@@ -48,14 +43,12 @@ export default function Accounts() {
     queryKey: ['accounts', page],
     queryFn: () => fetchAccounts(page, PAGE_SIZE),
     select: (data) => data.data,
-    staleTime: 3 * 60 * 1000,
   });
 
   const { data: accountCounts } = useQuery({
     queryKey: ['account-counts'],
     queryFn: fetchAccountCounts,
     select: (data) => data.count,
-    staleTime: Infinity,
   });
   const totalPages = Math.ceil((accountCounts ?? 0) / PAGE_SIZE);
 
