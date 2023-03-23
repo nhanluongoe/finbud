@@ -1,9 +1,9 @@
 import { supabase } from '../lib/initSupabase';
 import { Account } from '../types';
+import { getUserId } from './auth';
 
 export async function fetchAccounts(page = 0, size = 5) {
-  const session = await supabase.auth.getSession();
-  const userId = session.data.session?.user.id;
+  const userId = await getUserId();
 
   return await supabase
     .from('accounts')
@@ -14,12 +14,7 @@ export async function fetchAccounts(page = 0, size = 5) {
 }
 
 export async function addAccount(account: Omit<Account['Insert'], 'user_id'>) {
-  const session = await supabase.auth.getSession();
-  const userId = session.data.session?.user.id;
-
-  if (!userId) {
-    throw new Error("User doesn't exist ");
-  }
+  const userId = await getUserId();
 
   return await supabase.from('accounts').insert({
     user_id: userId,
@@ -58,8 +53,7 @@ export async function updateAccount(account: Account['Update']) {
 }
 
 export async function fetchAccountCounts() {
-  const session = await supabase.auth.getSession();
-  const userId = session.data.session?.user.id;
+  const userId = await getUserId();
 
   return await supabase
     .from('accounts')
