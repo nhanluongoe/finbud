@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
 import useFilter from '../../hooks/useFilter';
+import Filter from '../Filter';
 
 const PAGE_SIZE = 20;
 
@@ -207,13 +208,16 @@ export default function Transactions() {
 
   return (
     <section className='card'>
-      <div className='text-green-600 flex items-center mb-2 p-2'>
-        <span className='mr-2'>
-          <i className='text-2xl'>
-            <BiTransfer />
-          </i>
-        </span>
-        <h1 className='m-0 font-bold'>Transactions</h1>
+      <div className='flex items-center mb-2 p-2'>
+        <div className='text-green-600 flex items-center'>
+          <span className='mr-2'>
+            <i className='text-2xl'>
+              <BiTransfer />
+            </i>
+          </span>
+          <h1 className='m-0 font-bold'>Transactions</h1>
+        </div>
+        <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
 
       <table>
