@@ -18,7 +18,7 @@ import Pagination from '../Pagination';
 import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 10;
 
 export default function Budgets() {
   const { setError } = useError();
