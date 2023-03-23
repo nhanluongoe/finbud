@@ -27,6 +27,9 @@ create policy "Enable insert for authenticated users only" on public.budgets for
 
 create policy "Enable delete for authenticated users only" on public.budgets for delete to authenticated using (true);
 
+alter table public.budgets
+add column user_id uuid not null references auth.users on delete cascade;
+
 -- Functions
 
 -- update

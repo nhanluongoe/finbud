@@ -1,7 +1,10 @@
 import { supabase } from '../lib/initSupabase';
 import { Budget } from '../types';
+import { getUserId } from './auth';
 
 export async function fetchBudgets() {
+  const userId = await getUserId();
+
   const now = new Date();
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
@@ -12,15 +15,21 @@ export async function fetchBudgets() {
   return await supabase
     .from('budgets')
     .select()
+    .eq('user_id', userId)
     .gte('created_at', startDate)
     .lte('created_at', endDate)
     .order('id', { ascending: true });
 }
 
-export async function addBudget(budget: Omit<Budget['Insert'], 'remaining' | 'created_at'>) {
+export async function addBudget(
+  budget: Omit<Budget['Insert'], 'remaining' | 'created_at' | 'user_id'>,
+) {
+  const userId = await getUserId();
+
   return await supabase.from('budgets').insert({
     ...budget,
     remaining: budget.amount,
+    user_id: userId,
   });
 }
 
