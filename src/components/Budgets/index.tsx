@@ -37,7 +37,7 @@ export default function Budgets() {
   const [page, setPage] = useState(0);
 
   const { data } = useQuery({
-    queryKey: ['budgets'],
+    queryKey: ['budgets', page],
     queryFn: () => fetchBudgets(page, PAGE_SIZE),
     select: (data) => data.data,
     staleTime: 5 * 60 * 1000,
@@ -77,6 +77,21 @@ export default function Budgets() {
     const inputSplits = command.toLowerCase().split(' ');
     const action = inputSplits[0];
     const target = inputSplits[1];
+
+    function handleNavigation(direction: 'next' | 'previous') {
+      if (target !== 'b' && target !== 'budget') {
+        return;
+      }
+
+      setPage((page) => {
+        const atFirstPageAndBack = page === 0 && direction === 'previous';
+        const atLastPageAndNext = page === totalPages - 1 && direction === 'next';
+
+        if (atFirstPageAndBack || atLastPageAndNext) return page;
+
+        return direction === 'next' ? page + 1 : page - 1;
+      });
+    }
 
     function handleCreate() {
       const params = inputSplits.slice(2).join(' ');
@@ -126,6 +141,10 @@ export default function Budgets() {
     }
 
     const actionHandlers: Record<string, VoidFunction> = {
+      n: () => handleNavigation('next'),
+      next: () => handleNavigation('next'),
+      p: () => handleNavigation('previous'),
+      previous: () => handleNavigation('previous'),
       c: handleCreate,
       create: handleCreate,
       d: handleDelete,
