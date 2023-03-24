@@ -7,3 +7,4 @@ export { default as Pagination } from './Pagination/';
 export { default as Transactions } from './Transactions/';
 export { default as Budgets } from './Budgets/';
 export { default as Empty } from './Empty/';
+export { default as Alert } from './Alert/';
