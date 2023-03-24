@@ -10,7 +10,7 @@ export default function Header() {
           <img src='/finbud.png' alt='logo' />
           <p className='font-bold text-green-600'>Finbud</p>
         </section>
-        <p className='text-green-600'>{` Hi, ${firstName} ${lastName}`}</p>
+        <p className='text-green-600'>{` 👋 ${firstName} ${lastName}`}</p>
       </div>
     </header>
   );
