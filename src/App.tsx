@@ -20,10 +20,10 @@ function App() {
   return (
     <Layout>
       <section className='mb-5 flex items-stretch gap-4'>
-        <div className='flex-grow'>
+        <div className='flex-1'>
           <Accounts />
         </div>
-        <div className='flex-grow'>
+        <div className='flex-1'>
           <Budgets />
         </div>
       </section>
