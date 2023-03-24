@@ -18,6 +18,8 @@ import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
 import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
+import Empty from '../Empty';
+import { Wobbling } from '../LoadingIndicator';
 
 const PAGE_SIZE = 20;
 
@@ -43,7 +45,7 @@ export default function Transactions() {
   const [page, setPage] = useState(0);
   const { date, setMonth, setYear } = useFilter();
 
-  const data = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['transactions', page, date.month, date.year],
     queryFn: () => fetchTransactions(page, PAGE_SIZE, date.month, date.year),
     select: (res) => res.data,
@@ -139,7 +141,7 @@ export default function Transactions() {
         amount: +amount,
         budget_id: _budget,
         note,
-        created_at: date.toString(),
+        created_at: date,
       });
     }
 
@@ -219,70 +221,77 @@ export default function Transactions() {
         </div>
         <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th className='pl-3 rounded-l-md'></th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <MdTextFormat className='mr-1' />
-                <span>Name</span>
-              </div>
-            </th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <BsArrowDownLeft className='mr-1' />
-                <span>From</span>
-              </div>
-            </th>
-            <th className='flex items-center justify-center'>
-              <div className='flex items-center justify-center'>
-                <BsArrowUpRight className='mr-1' /> <span>To</span>
-              </div>
-            </th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <MdNumbers className='mr-1' />
-                <span>Amount</span>
-              </div>
-            </th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <MdTextFormat className='mr-1' />
-                <span>Budget</span>
-              </div>
-            </th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <BiNote className='mr-1' />
-                <span>Note</span>
-              </div>
-            </th>
-            <th className='pr-3 rounded-r-md'>
-              <div className='flex items-center justify-center'>
-                <MdOutlineDateRange className='mr-1' />
-                <span>Date</span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.data?.map((transaction) => (
-            <tr key={transaction.id}>
-              <td className='pl-3 text-gray-400 text-left text-sm'>{transaction.id}</td>
-              <td>{transaction.name}</td>
-              <td>{transaction.sender_name}</td>
-              <td>{transaction.receiver_name}</td>
-              <td className='text-right'>{toCurrency(transaction.amount)}</td>
-              <td>{transaction.budget_name}</td>
-              <td>{transaction.note}</td>
-              <td className='pr-3'>{transaction.created_at}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Pagination page={page} totalPages={totalPages} className='justify-end' />
+      {isLoading ? (
+        <Wobbling />
+      ) : !data || data.length === 0 ? (
+        <Empty />
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th className='pl-3 rounded-l-md'></th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <MdTextFormat className='mr-1' />
+                    <span>Name</span>
+                  </div>
+                </th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <BsArrowDownLeft className='mr-1' />
+                    <span>From</span>
+                  </div>
+                </th>
+                <th className='flex items-center justify-center'>
+                  <div className='flex items-center justify-center'>
+                    <BsArrowUpRight className='mr-1' /> <span>To</span>
+                  </div>
+                </th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <MdNumbers className='mr-1' />
+                    <span>Amount</span>
+                  </div>
+                </th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <MdTextFormat className='mr-1' />
+                    <span>Budget</span>
+                  </div>
+                </th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <BiNote className='mr-1' />
+                    <span>Note</span>
+                  </div>
+                </th>
+                <th className='pr-3 rounded-r-md'>
+                  <div className='flex items-center justify-center'>
+                    <MdOutlineDateRange className='mr-1' />
+                    <span>Date</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td className='pl-3 text-gray-400 text-left text-sm'>{transaction.id}</td>
+                  <td>{transaction.name}</td>
+                  <td>{transaction.sender_name}</td>
+                  <td>{transaction.receiver_name}</td>
+                  <td className='text-right'>{toCurrency(transaction.amount)}</td>
+                  <td>{transaction.budget_name}</td>
+                  <td>{transaction.note}</td>
+                  <td className='pr-3'>{transaction.created_at}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination page={page} totalPages={totalPages} className='justify-end' />
+        </>
+      )}
     </section>
   );
 }

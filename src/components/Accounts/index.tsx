@@ -16,6 +16,8 @@ import {
   updateAccount,
 } from '../../helper';
 import { parseParams } from '../../helper/parser';
+import Empty from '../Empty';
+import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
 
 export default function Accounts() {
@@ -39,7 +41,7 @@ export default function Accounts() {
 
   const [page, setPage] = useState(0);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['accounts', page],
     queryFn: () => fetchAccounts(page, PAGE_SIZE),
     select: (data) => data.data,
@@ -159,8 +161,6 @@ export default function Accounts() {
     }
   }, [command]);
 
-  if (!data) return null;
-
   return (
     <section className='card'>
       <div className='text-green-600 flex items-center mb-2 p-2'>
@@ -171,35 +171,43 @@ export default function Accounts() {
         </span>
         <h1 className='m-0 font-bold'>Accounts</h1>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th className='pl-3 rounded-l-md'></th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <MdTextFormat className='mr-1' />
-                <span>Name</span>
-              </div>
-            </th>
-            <th className='pr-3 rounded-r-md'>
-              <div className='flex items-center justify-center'>
-                <MdNumbers className='mr-1' />
-                <span>Balance</span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((account) => (
-            <tr key={account.id}>
-              <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
-              <td>{account.name}</td>
-              <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Pagination page={page} totalPages={totalPages} className='justify-end' />
+      {isLoading ? (
+        <Wobbling />
+      ) : !data || data.length === 0 ? (
+        <Empty />
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th className='pl-3 rounded-l-md'></th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <MdTextFormat className='mr-1' />
+                    <span>Name</span>
+                  </div>
+                </th>
+                <th className='pr-3 rounded-r-md'>
+                  <div className='flex items-center justify-center'>
+                    <MdNumbers className='mr-1' />
+                    <span>Balance</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((account) => (
+                <tr key={account.id}>
+                  <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
+                  <td>{account.name}</td>
+                  <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination page={page} totalPages={totalPages} className='justify-end' />
+        </>
+      )}
     </section>
   );
 }

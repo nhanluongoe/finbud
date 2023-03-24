@@ -17,6 +17,8 @@ import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
 import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
+import { Wobbling } from '../LoadingIndicator';
+import Empty from '../Empty';
 
 const PAGE_SIZE = 10;
 
@@ -42,7 +44,7 @@ export default function Budgets() {
   const [page, setPage] = useState(0);
   const { date, setMonth, setYear } = useFilter();
 
-  const { data: budgets } = useQuery({
+  const { data: budgets, isLoading } = useQuery({
     queryKey: ['budgets', page, date.month, date.year],
     queryFn: () => fetchBudgets(page, PAGE_SIZE, date.month, date.year),
     select: (data) => data.data,
@@ -184,8 +186,6 @@ export default function Budgets() {
     }
   }, [command]);
 
-  if (!budgets) return null;
-
   return (
     <section className='card'>
       <div className='flex items-center mb-2 p-2'>
@@ -199,42 +199,50 @@ export default function Budgets() {
         </div>
         <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th className='pl-3 rounded-l-md'></th>
-            <th>
-              <div className='flex items-center justify-center'>
-                <MdTextFormat className='mr-1' />
-                <span>Name</span>
-              </div>
-            </th>
-            <th className='pr-3 rounded-r-md'>
-              <div className='flex items-center justify-center'>
-                <MdNumbers className='mr-1' />
-                <span>Amount</span>
-              </div>
-            </th>
-            <th className='pr-3 rounded-r-md'>
-              <div className='flex items-center justify-center'>
-                <MdNumbers className='mr-1' />
-                <span>Remaining</span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {budgets.map((budget) => (
-            <tr key={budget.id}>
-              <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
-              <td>{budget.name}</td>
-              <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
-              <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Pagination page={page} totalPages={totalPages} className='justify-end' />
+      {isLoading ? (
+        <Wobbling />
+      ) : !budgets || budgets.length === 0 ? (
+        <Empty />
+      ) : (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th className='pl-3 rounded-l-md'></th>
+                <th>
+                  <div className='flex items-center justify-center'>
+                    <MdTextFormat className='mr-1' />
+                    <span>Name</span>
+                  </div>
+                </th>
+                <th className='pr-3 rounded-r-md'>
+                  <div className='flex items-center justify-center'>
+                    <MdNumbers className='mr-1' />
+                    <span>Amount</span>
+                  </div>
+                </th>
+                <th className='pr-3 rounded-r-md'>
+                  <div className='flex items-center justify-center'>
+                    <MdNumbers className='mr-1' />
+                    <span>Remaining</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {budgets.map((budget) => (
+                <tr key={budget.id}>
+                  <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
+                  <td>{budget.name}</td>
+                  <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
+                  <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination page={page} totalPages={totalPages} className='justify-end' />
+        </>
+      )}
     </section>
   );
 }
