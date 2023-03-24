@@ -203,7 +203,7 @@ export default function Budgets() {
       {isLoading ? (
         <Wobbling />
       ) : !budgets || budgets.length === 0 ? (
-        <div className='flex flex-col justify-center items-center'>
+        <div className='flex flex-col justify-center items-center mb-5'>
           <Empty />
           <Alert
             variant='info'
