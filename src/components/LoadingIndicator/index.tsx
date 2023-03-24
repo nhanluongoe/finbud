@@ -9,3 +9,5 @@ export default function LoadingIndicator() {
 
   return <div className={style.dots} />;
 }
+
+export { default as Wobbling } from './Wobbling';

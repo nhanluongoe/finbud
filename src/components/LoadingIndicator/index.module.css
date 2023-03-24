@@ -1,7 +1,7 @@
 .dots {
   width: 45px;
   aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+  --_g: no-repeat radial-gradient(circle closest-side, #16a34a 90%, #0000);
   background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
   background-size: calc(100% / 3) 50%;
   animation: d3 1s infinite linear;
@@ -18,5 +18,33 @@
   }
   80% {
     background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
+}
+
+.wobbling {
+  width: 20px;
+  height: 20px;
+  background: #16a34a;
+  box-shadow: 0 0 60px 15px #16a34a;
+  transform: translate(-80px);
+  clip-path: inset(0);
+  animation: w4-1 0.5s ease-in-out infinite alternate, w4-2 1s ease-in-out infinite;
+}
+
+@keyframes w4-1 {
+  100% {
+    transform: translateX(80px);
+  }
+}
+
+@keyframes w4-2 {
+  33% {
+    clip-path: inset(0 0 0 -100px);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  83% {
+    clip-path: inset(0 -100px 0 0);
   }
 }
