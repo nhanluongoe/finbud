@@ -16,6 +16,7 @@ import {
   updateAccount,
 } from '../../helper';
 import { parseParams } from '../../helper/parser';
+import Alert from '../Alert';
 import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
@@ -174,7 +175,18 @@ export default function Accounts() {
       {isLoading ? (
         <Wobbling />
       ) : !data || data.length === 0 ? (
-        <Empty />
+        <div className='flex flex-col justify-center items-center'>
+          <Empty />
+          <Alert
+            variant='info'
+            message={
+              <p>
+                Use command <span className='font-bold'>create account name=?&balance=?</span> to
+                create an account!
+              </p>
+            }
+          />
+        </div>
       ) : (
         <>
           <table>

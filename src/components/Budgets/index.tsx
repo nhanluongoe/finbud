@@ -19,6 +19,7 @@ import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
 import { Wobbling } from '../LoadingIndicator';
 import Empty from '../Empty';
+import Alert from '../Alert';
 
 const PAGE_SIZE = 10;
 
@@ -202,7 +203,18 @@ export default function Budgets() {
       {isLoading ? (
         <Wobbling />
       ) : !budgets || budgets.length === 0 ? (
-        <Empty />
+        <div className='flex flex-col justify-center items-center'>
+          <Empty />
+          <Alert
+            variant='info'
+            message={
+              <p>
+                Use command <span className='font-bold'>create budget name=?&amount=?</span> to
+                create an budget!
+              </p>
+            }
+          />
+        </div>
       ) : (
         <>
           <table>
