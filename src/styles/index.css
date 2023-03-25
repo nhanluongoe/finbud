@@ -40,4 +40,20 @@
   .chip {
     @apply border rounded-3xl px-3 py-1 border-blue-400 text-blue-400 bg-blue-50;
   }
+
+  .modal {
+    @apply fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50;
+  }
+
+  .backtick {
+    @apply bg-gray-100 text-amber-700 rounded-md p-1 border border-amber-700 font-mono w-fit m-1;
+  }
+
+  .key {
+    @apply bg-gray-100 text-gray-700 rounded-md p-1 border border-gray-700 font-mono w-fit m-1;
+  }
+
+  .divider {
+    @apply border-b-2 border-gray-100 my-8;
+  }
 }

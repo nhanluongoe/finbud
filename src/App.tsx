@@ -30,6 +30,7 @@ function App() {
       <section>
         <Transactions />
       </section>
+      <Help />
       <CommandHistoryProvider>
         <CommandLine />
       </CommandHistoryProvider>
