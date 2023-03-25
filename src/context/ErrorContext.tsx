@@ -3,10 +3,14 @@ import { toErrorWithMessage } from '../helper/errorHandler';
 
 interface IErrorContext {
   message: string | null;
+}
+
+interface ISetErrorContext {
   setError: React.Dispatch<unknown>;
 }
 
-const ErrorContext = createContext<IErrorContext>({ message: null, setError: () => null });
+const ErrorContext = createContext<IErrorContext>({ message: null });
+const SetErrorContext = createContext<ISetErrorContext>({ setError: () => null });
 
 export default function ErrorProvider(props: { children: ReactNode }) {
   const { children } = props;
@@ -14,9 +18,12 @@ export default function ErrorProvider(props: { children: ReactNode }) {
   const [error, setError] = useState<unknown>();
 
   const message = error !== null ? toErrorWithMessage(error).message : null;
-  const context = { message, setError };
 
-  return <ErrorContext.Provider value={context}>{children}</ErrorContext.Provider>;
+  return (
+    <SetErrorContext.Provider value={{ setError }}>
+      <ErrorContext.Provider value={{ message }}>{children}</ErrorContext.Provider>;
+    </SetErrorContext.Provider>
+  );
 }
 
 export function useError() {
@@ -24,6 +31,16 @@ export function useError() {
 
   if (!context) {
     throw new Error('useError must be used within ErrorProvider');
+  }
+
+  return context;
+}
+
+export function useSetError() {
+  const context = useContext(SetErrorContext);
+
+  if (!context) {
+    throw new Error('useSetError must be used within ErrorProvider');
   }
 
   return context;

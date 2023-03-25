@@ -11,7 +11,7 @@ import {
   updateTransaction,
 } from '../../helper/transaction';
 import { toCurrency } from '../../helper';
-import { useError } from '../../context/ErrorContext';
+import { useSetError } from '../../context/ErrorContext';
 import { useCommand } from '../../context/CommandContext';
 import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
@@ -24,7 +24,7 @@ import { Wobbling } from '../LoadingIndicator';
 const PAGE_SIZE = 20;
 
 export default function Transactions() {
-  const { setError } = useError();
+  const { setError } = useSetError();
   const command = useCommand();
   const queryClient = useQueryClient();
 

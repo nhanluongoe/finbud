@@ -2,11 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { RiBankCard2Fill } from 'react-icons/ri';
-import { useCommand } from '../../context/CommandContext';
-import { useError } from '../../context/ErrorContext';
 
 const PAGE_SIZE = 5;
 
+import { useSetError } from '../../context/ErrorContext';
 import {
   addAccount,
   deleteAccount,
@@ -21,7 +20,7 @@ import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
 
 export default function Accounts() {
-  const { setError } = useError();
+  const { setError } = useSetError();
   const command = useCommand();
   const queryClient = useQueryClient();
 

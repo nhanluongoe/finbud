@@ -10,7 +10,7 @@ import {
   toCurrency,
   updateBudget,
 } from '../../helper';
-import { useError } from '../../context/ErrorContext';
+import { useSetError } from '../../context/ErrorContext';
 import { useCommand } from '../../context/CommandContext';
 import { useEffect, useState } from 'react';
 import { parseParams } from '../../helper/parser';
@@ -23,7 +23,7 @@ import Empty from '../Empty';
 const PAGE_SIZE = 10;
 
 export default function Budgets() {
-  const { setError } = useError();
+  const { setError } = useSetError();
   const command = useCommand();
   const queryClient = useQueryClient();
 

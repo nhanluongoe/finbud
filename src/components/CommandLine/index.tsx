@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import useEventListener from '../../hooks/useEventLister';
-import { useError } from '../../context/ErrorContext';
+import { useSetError } from '../../context/ErrorContext';
 import { supabase } from '../../lib/initSupabase';
 import { useCommandHistory } from '../../context/CommandHistoryContext';
 import { useSetCommand } from '../../context/CommandContext';
@@ -15,7 +15,7 @@ export default function CommandLine() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
-  const { setError } = useError();
+  const { setError } = useSetError();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
