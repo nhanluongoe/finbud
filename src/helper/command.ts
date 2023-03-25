@@ -1,6 +1,6 @@
 const crudActions = ['create', 'c', 'update', 'u', 'delete', 'd'];
 const filterActions = ['filter', 'f'];
-const navigateActions = ['navigate', 'n'];
+const navigateActions = ['next', 'n', 'previous', 'p'];
 const authActions = ['logout', 'lo'];
 
 const validActions = [...crudActions, ...filterActions, ...navigateActions, ...authActions];
