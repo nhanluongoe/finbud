@@ -1,11 +1,15 @@
 import { useSession } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 
-import { CommandLine, Layout } from './components';
-import { Accounts } from './components';
-import Budgets from './components/Budgets';
-import CommandError from './components/CommandError';
-import Transactions from './components/Transactions';
+import {
+  Accounts,
+  CommandError,
+  CommandLine,
+  Layout,
+  Transactions,
+  Help,
+  Budgets,
+} from './components';
 import CommandHistoryProvider from './context/CommandHistoryContext';
 
 import { supabase } from './lib/initSupabase';
