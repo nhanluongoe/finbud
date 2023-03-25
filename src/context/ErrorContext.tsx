@@ -21,7 +21,7 @@ export default function ErrorProvider(props: { children: ReactNode }) {
 
   return (
     <SetErrorContext.Provider value={{ setError }}>
-      <ErrorContext.Provider value={{ message }}>{children}</ErrorContext.Provider>;
+      <ErrorContext.Provider value={{ message }}>{children}</ErrorContext.Provider>
     </SetErrorContext.Provider>
   );
 }
