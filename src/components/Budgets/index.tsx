@@ -48,6 +48,7 @@ export default function Budgets() {
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['budget-counts']);
     },
   });
 
@@ -56,6 +57,7 @@ export default function Budgets() {
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['budget-counts']);
     },
   });
 
@@ -64,6 +66,7 @@ export default function Budgets() {
     onSuccess: () => {
       setError(null);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['budget-counts']);
     },
   });
 

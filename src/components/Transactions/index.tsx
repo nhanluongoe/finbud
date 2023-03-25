@@ -50,6 +50,7 @@ export default function Transactions() {
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transaction-counts']);
     },
   });
 
@@ -60,6 +61,7 @@ export default function Transactions() {
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transaction-counts']);
     },
   });
 
@@ -70,6 +72,7 @@ export default function Transactions() {
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
+      queryClient.invalidateQueries(['transaction-counts']);
     },
   });
 

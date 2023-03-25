@@ -10,7 +10,6 @@ import { useSetCommand } from '../../context/CommandContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { isCommandValid } from '../../helper';
 
-
 export default function CommandLine() {
   const setCommand = useSetCommand();
   const { history, setHistory } = useCommandHistory();
