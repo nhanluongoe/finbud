@@ -8,3 +8,5 @@ export { default as Transactions } from './Transactions/';
 export { default as Budgets } from './Budgets/';
 export { default as Empty } from './Empty/';
 export { default as Alert } from './Alert/';
+export { default as Portal } from './Portal/';
+export { default as Modal } from './Modal/';
