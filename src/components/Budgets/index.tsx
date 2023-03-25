@@ -27,20 +27,6 @@ export default function Budgets() {
   const command = useCommand();
   const queryClient = useQueryClient();
 
-  queryClient.setDefaultOptions({
-    queries: {
-      staleTime: Infinity,
-    },
-    mutations: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
-    },
-  });
-
   const [page, setPage] = useState(0);
   const { date, setMonth, setYear } = useFilter();
 
@@ -60,6 +46,7 @@ export default function Budgets() {
   const addBudgetMutation = useMutation({
     mutationFn: addBudget,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['budgets']);
     },
   });
@@ -67,6 +54,7 @@ export default function Budgets() {
   const deleteBudgetMutation = useMutation({
     mutationFn: deleteBudget,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['budgets']);
     },
   });
@@ -74,6 +62,7 @@ export default function Budgets() {
   const updateBudgetMutation = useMutation({
     mutationFn: updateBudget,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['budgets']);
     },
   });
@@ -119,11 +108,9 @@ export default function Budgets() {
       const params = inputSplits.slice(2).join(' ');
 
       if (target !== 'b' && target !== 'budget') {
-        setError('Invalid create command!');
         return;
       }
 
-      setError(null);
       const { name, amount = 0 } = parseParams(params);
       addBudgetMutation.mutate({
         name,
@@ -135,11 +122,9 @@ export default function Budgets() {
       const targetId = inputSplits[2];
 
       if (target !== 'b' && target !== 'budget') {
-        setError('Invalid delete command!');
         return;
       }
 
-      setError(null);
       deleteBudgetMutation.mutate(+targetId);
     }
 
@@ -148,11 +133,9 @@ export default function Budgets() {
       const params = inputSplits.slice(3).join(' ');
 
       if (target !== 'b' && target !== 'budget') {
-        setError('Invalid update command!');
         return;
       }
 
-      setError(null);
       const { name, amount } = parseParams(params);
       const _amount = amount ? +amount : null;
       updateBudgetMutation.mutate({
@@ -181,8 +164,6 @@ export default function Budgets() {
 
     if (handler) {
       handler();
-    } else {
-      setError('Invalid command!');
     }
   }, [command]);
 

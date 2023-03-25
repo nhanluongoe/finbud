@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { RiBankCard2Fill } from 'react-icons/ri';
 
-const PAGE_SIZE = 5;
-
+import { useCommand } from '../../context/CommandContext';
 import { useSetError } from '../../context/ErrorContext';
 import {
   addAccount,
@@ -13,30 +12,18 @@ import {
   fetchAccounts,
   toCurrency,
   updateAccount,
+  parseParams,
 } from '../../helper';
-import { parseParams } from '../../helper/parser';
 import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
+
+const PAGE_SIZE = 5;
 
 export default function Accounts() {
   const { setError } = useSetError();
   const command = useCommand();
   const queryClient = useQueryClient();
-
-  queryClient.setDefaultOptions({
-    queries: {
-      staleTime: Infinity,
-    },
-    mutations: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
-    },
-  });
 
   const [page, setPage] = useState(0);
 
@@ -56,22 +43,28 @@ export default function Accounts() {
   const addAccountMutation = useMutation({
     mutationFn: addAccount,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['account-counts']);
     },
   });
 
   const deleteAccountMutation = useMutation({
     mutationFn: deleteAccount,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['transactions']);
+      queryClient.invalidateQueries(['account-counts']);
     },
   });
 
   const updateAccountMutation = useMutation({
     mutationFn: updateAccount,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['accounts']);
+      queryClient.invalidateQueries(['account-counts']);
     },
   });
 
@@ -99,11 +92,9 @@ export default function Accounts() {
       const params = inputSplits.slice(2).join(' ');
 
       if (target !== 'a' && target !== 'account') {
-        setError('Invalid create command!');
         return;
       }
 
-      setError(null);
       const { name, balance = 0 } = parseParams(params);
       addAccountMutation.mutate({ name, balance: +balance });
     }
@@ -112,11 +103,9 @@ export default function Accounts() {
       const targetId = inputSplits[2];
 
       if (target !== 'a' && target !== 'account') {
-        setError('Invalid delete command!');
         return;
       }
 
-      setError(null);
       deleteAccountMutation.mutate(+targetId);
     }
 
@@ -125,11 +114,9 @@ export default function Accounts() {
       const params = inputSplits.slice(3).join(' ');
 
       if (target !== 'a' && target !== 'account') {
-        setError('Invalid update command!');
         return;
       }
 
-      setError(null);
       const { name, balance } = parseParams(params);
       updateAccountMutation.mutate({
         id: +targetId,
@@ -155,8 +142,6 @@ export default function Accounts() {
 
     if (handler) {
       handler();
-    } else {
-      setError('Invalid command!');
     }
   }, [command]);
 

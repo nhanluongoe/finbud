@@ -7,15 +7,28 @@ import { useSetError } from '../../context/ErrorContext';
 import { supabase } from '../../lib/initSupabase';
 import { useCommandHistory } from '../../context/CommandHistoryContext';
 import { useSetCommand } from '../../context/CommandContext';
+import { useQueryClient } from '@tanstack/react-query';
+import { isCommandValid } from '../../helper';
+
 
 export default function CommandLine() {
   const setCommand = useSetCommand();
-
   const { history, setHistory } = useCommandHistory();
-
   const inputRef = useRef<HTMLInputElement>(null);
   const [visible, setVisible] = useState<boolean>(false);
   const { setError } = useSetError();
+  const queryClient = useQueryClient();
+
+  queryClient.setDefaultOptions({
+    queries: {
+      staleTime: Infinity,
+    },
+    mutations: {
+      onError: (err) => {
+        setError(err);
+      },
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,9 +36,19 @@ export default function CommandLine() {
     const eventTarget = e.target as typeof e.target & {
       command: { value: string };
     };
+    const command = eventTarget.command.value;
 
-    if (eventTarget.command.value === '') {
+    if (command === '') {
       setError(null);
+      hideInput();
+      return;
+    }
+
+    // Add command to history
+    setHistory?.((history) => [...history, command]);
+
+    if (!isCommandValid(command)) {
+      setError('Invalid command!');
       hideInput();
       return;
     }
@@ -33,22 +56,19 @@ export default function CommandLine() {
     // add uuid to make command unique even if user enters...
     // the same command consecutively to make useEffect that...
     // have command as depenency always run on each command
-    setCommand(eventTarget.command.value + ` &uuid=${uuidv4()}`);
+    setCommand(command + ` &uuid=${uuidv4()}`);
 
-    // Add command to history
-    setHistory?.((history) => [...history, eventTarget.command.value]);
+    const inputSplits = command.split(' ');
+    const action = inputSplits[0].toLowerCase();
 
-    const inputSplits = eventTarget.command.value.split(' ');
-    const command = inputSplits[0];
-
-    switch (command.toLowerCase()) {
+    switch (action) {
       // Auth
+      case 'lo':
       case 'logout': {
         await supabase.auth.signOut();
         break;
       }
       default:
-        setError('Invalid command!');
         break;
     }
 
@@ -140,7 +160,7 @@ export default function CommandLine() {
   }
 
   return (
-    <div className={`fixed block w-full h-full top-0 left-0 right-0 bottom-0`}>
+    <div className='fixed block w-full h-full top-0 left-0 right-0 bottom-0'>
       <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
         <form onSubmit={handleSubmit} className='w-full'>
           <p className='text-gray-500 mb-1'>

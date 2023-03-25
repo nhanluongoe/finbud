@@ -28,20 +28,6 @@ export default function Transactions() {
   const command = useCommand();
   const queryClient = useQueryClient();
 
-  queryClient.setDefaultOptions({
-    queries: {
-      staleTime: Infinity,
-    },
-    mutations: {
-      onSuccess: () => {
-        setError(null);
-      },
-      onError: (err) => {
-        setError(err);
-      },
-    },
-  });
-
   const [page, setPage] = useState(0);
   const { date, setMonth, setYear } = useFilter();
 
@@ -60,6 +46,7 @@ export default function Transactions() {
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
@@ -69,6 +56,7 @@ export default function Transactions() {
   const deleteTransactionMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
@@ -78,6 +66,7 @@ export default function Transactions() {
   const updateTransactionMutation = useMutation({
     mutationFn: updateTransaction,
     onSuccess: () => {
+      setError(null);
       queryClient.invalidateQueries(['transactions']);
       queryClient.invalidateQueries(['accounts']);
       queryClient.invalidateQueries(['budgets']);
@@ -125,11 +114,9 @@ export default function Transactions() {
       const params = inputSplits.slice(2).join(' ');
 
       if (target !== 't' && target !== 'transaction') {
-        setError('Invalid create command!');
         return;
       }
 
-      setError(null);
       const { name, from, to, amount = 0, date = new Date(), budget, note } = parseParams(params);
       const _to = to ? +to : null;
       const _from = from ? +from : null;
@@ -149,11 +136,9 @@ export default function Transactions() {
       const targetId = inputSplits[2];
 
       if (target !== 't' && target !== 'transaction') {
-        setError('Invalid delete command!');
         return;
       }
 
-      setError(null);
       deleteTransactionMutation.mutate(+targetId);
     }
 
@@ -162,11 +147,9 @@ export default function Transactions() {
       const params = inputSplits.slice(3).join(' ');
 
       if (target !== 't' && target !== 'transaction') {
-        setError('Invalid update command!');
         return;
       }
 
-      setError(null);
       const { name, from, to, amount, budget, note, date = new Date() } = parseParams(params);
       const _from = from ? +from : null;
       const _to = to ? +to : null;
@@ -203,8 +186,6 @@ export default function Transactions() {
 
     if (handler) {
       handler();
-    } else {
-      setError('Invalid command!');
     }
   }, [command]);
 
