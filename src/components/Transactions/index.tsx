@@ -20,7 +20,6 @@ import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
 import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
-import Alert from '../Alert';
 
 const PAGE_SIZE = 20;
 
@@ -225,21 +224,7 @@ export default function Transactions() {
       {isLoading ? (
         <Wobbling />
       ) : !data || data.length === 0 ? (
-        <div className='flex flex-col justify-center items-center mb-5'>
-          <Empty />
-          <Alert
-            variant='info'
-            message={
-              <p className='text-center'>
-                Use command{' '}
-                <span className='font-bold'>
-                  create transactions name=?&from=?&to=?&amount=?&budget=?&note=?...
-                </span>{' '}
-                to create an account!
-              </p>
-            }
-          />
-        </div>
+        <Empty />
       ) : (
         <>
           <table>
