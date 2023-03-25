@@ -91,9 +91,9 @@ export default function Accounts() {
         return;
       }
 
-      const { name, n, balance = 0, b = 0 } = parseParams(params);
+      const { name, n, balance, b } = parseParams(params);
       const _name = name ?? n;
-      const _balance = balance ?? b;
+      const _balance = balance ?? b ?? 0;
       addAccountMutation.mutate({ name: _name, balance: +_balance });
     }
 

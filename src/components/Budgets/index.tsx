@@ -112,9 +112,9 @@ export default function Budgets() {
         return;
       }
 
-      const { name, n, amount, a = 0 } = parseParams(params);
+      const { name, n, amount, a } = parseParams(params);
       const _name = name ?? n;
-      const _amount = amount ?? a;
+      const _amount = amount ?? a ?? 0;
       addBudgetMutation.mutate({
         name: _name,
         amount: +_amount,

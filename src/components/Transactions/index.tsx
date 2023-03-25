@@ -121,8 +121,8 @@ export default function Transactions() {
         f,
         to,
         t,
-        amount = 0,
-        a = 0,
+        amount,
+        a,
         date = new Date().toISOString(),
         d,
         budget,
@@ -133,7 +133,7 @@ export default function Transactions() {
       const _name = name ?? n;
       const _from = from ?? f;
       const _to = to ?? t;
-      const _amount = amount ?? a;
+      const _amount = amount ?? a ?? 0;
       const _date = date ?? d;
       const _budget = budget ?? b;
       const _note = note ?? no;
