@@ -79,14 +79,16 @@ export default function Transactions() {
       }
 
       const params = inputSplits.slice(2).join(' ');
-      const { month, year } = parseParams(params);
+      const { month, m, year, y } = parseParams(params);
+      const _month = month ?? m;
+      const _year = year ?? y;
 
-      if (month) {
-        setMonth(+month);
+      if (_month) {
+        setMonth(+_month);
       }
 
-      if (year) {
-        setYear(+year);
+      if (_year) {
+        setYear(+_year);
       }
     }
 
@@ -114,24 +116,35 @@ export default function Transactions() {
 
       const {
         name,
+        n,
         from,
+        f,
         to,
+        t,
         amount = 0,
+        a = 0,
         date = new Date().toISOString(),
+        d,
         budget,
+        b,
         note,
+        no,
       } = parseParams(params);
-      const _to = to ? +to : null;
-      const _from = from ? +from : null;
-      const _budget = budget ? +budget : null;
+      const _name = name ?? n;
+      const _from = from ?? f;
+      const _to = to ?? t;
+      const _amount = amount ?? a;
+      const _date = date ?? d;
+      const _budget = budget ?? b;
+      const _note = note ?? no;
       addTransactionMutation.mutate({
-        name,
-        sender_id: _from,
-        receiver_id: _to,
-        amount: +amount,
-        budget_id: _budget,
-        note,
-        created_at: date,
+        name: _name,
+        sender_id: _from ? +_from : null,
+        receiver_id: _to ? +_to : null,
+        amount: +_amount,
+        budget_id: _budget ? +_budget : null,
+        note: _note,
+        created_at: _date,
       });
     }
 

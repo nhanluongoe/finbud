@@ -91,8 +91,10 @@ export default function Accounts() {
         return;
       }
 
-      const { name, balance = 0 } = parseParams(params);
-      addAccountMutation.mutate({ name, balance: +balance });
+      const { name, n, balance = 0, b = 0 } = parseParams(params);
+      const _name = name ?? n;
+      const _balance = balance ?? b;
+      addAccountMutation.mutate({ name: _name, balance: +_balance });
     }
 
     function handleDelete() {
@@ -113,11 +115,13 @@ export default function Accounts() {
         return;
       }
 
-      const { name, balance } = parseParams(params);
+      const { name, n, balance, b } = parseParams(params);
+      const _name = name ?? n;
+      const _balance = balance ?? b;
       updateAccountMutation.mutate({
         id: +targetId,
-        name,
-        balance: balance === undefined ? balance : +balance,
+        name: _name,
+        balance: _balance === undefined ? _balance : +_balance,
       });
     }
 

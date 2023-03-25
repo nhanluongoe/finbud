@@ -77,14 +77,16 @@ export default function Budgets() {
       }
 
       const params = inputSplits.slice(2).join(' ');
-      const { month, year } = parseParams(params);
+      const { month, m, year, y } = parseParams(params);
+      const _month = month ?? m;
+      const _year = year ?? y;
 
-      if (month) {
-        setMonth(+month);
+      if (_month) {
+        setMonth(+_month);
       }
 
-      if (year) {
-        setYear(+year);
+      if (_year) {
+        setYear(+_year);
       }
     }
 
@@ -110,10 +112,12 @@ export default function Budgets() {
         return;
       }
 
-      const { name, amount = 0 } = parseParams(params);
+      const { name, n, amount, a = 0 } = parseParams(params);
+      const _name = name ?? n;
+      const _amount = amount ?? a;
       addBudgetMutation.mutate({
-        name,
-        amount: +amount,
+        name: _name,
+        amount: +_amount,
       });
     }
 
@@ -135,12 +139,13 @@ export default function Budgets() {
         return;
       }
 
-      const { name, amount } = parseParams(params);
-      const _amount = amount ? +amount : null;
+      const { name, n, amount, a } = parseParams(params);
+      const _name = name ?? n;
+      const _amount = amount ?? a;
       updateBudgetMutation.mutate({
         id: +targetId,
-        name,
-        amount: _amount,
+        name: _name,
+        amount: _amount ? +_amount : null,
       });
     }
 
