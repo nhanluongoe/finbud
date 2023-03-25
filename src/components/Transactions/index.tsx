@@ -2,19 +2,19 @@ import { BiTransfer, BiNote } from 'react-icons/bi';
 import { BsArrowDownLeft, BsArrowUpRight } from 'react-icons/bs';
 import { MdNumbers, MdOutlineDateRange, MdTextFormat } from 'react-icons/md';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addTransaction,
   deleteTransaction,
   fetchTransactionCounts,
   fetchTransactions,
   updateTransaction,
-} from '../../helper/transaction';
-import { toCurrency } from '../../helper';
+  toCurrency,
+  parseParams,
+} from '../../helper';
 import { useSetError } from '../../context/ErrorContext';
 import { useCommand } from '../../context/CommandContext';
 import { useEffect, useState } from 'react';
-import { parseParams } from '../../helper/parser';
 import Pagination from '../Pagination';
 import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
@@ -22,6 +22,16 @@ import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
 
 const PAGE_SIZE = 20;
+
+function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.Dispatch<unknown>) {
+  return () => {
+    setError(null);
+    queryClient.invalidateQueries(['transactions']);
+    queryClient.invalidateQueries(['accounts']);
+    queryClient.invalidateQueries(['budgets']);
+    queryClient.invalidateQueries(['transaction-counts']);
+  };
+}
 
 export default function Transactions() {
   const { setError } = useSetError();
@@ -45,35 +55,17 @@ export default function Transactions() {
 
   const addTransactionMutation = useMutation({
     mutationFn: addTransaction,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['transaction-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const deleteTransactionMutation = useMutation({
     mutationFn: deleteTransaction,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['transaction-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const updateTransactionMutation = useMutation({
     mutationFn: updateTransaction,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['transaction-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   useEffect(() => {

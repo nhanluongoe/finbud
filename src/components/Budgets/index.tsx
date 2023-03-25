@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { BsBox } from 'react-icons/bs';
 
@@ -21,6 +21,14 @@ import { Wobbling } from '../LoadingIndicator';
 import Empty from '../Empty';
 
 const PAGE_SIZE = 10;
+
+function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.Dispatch<unknown>) {
+  return () => {
+    setError(null);
+    queryClient.invalidateQueries(['budgets']);
+    queryClient.invalidateQueries(['budget-counts']);
+  };
+}
 
 export default function Budgets() {
   const { setError } = useSetError();
@@ -45,29 +53,17 @@ export default function Budgets() {
 
   const addBudgetMutation = useMutation({
     mutationFn: addBudget,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['budget-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const deleteBudgetMutation = useMutation({
     mutationFn: deleteBudget,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['budget-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const updateBudgetMutation = useMutation({
     mutationFn: updateBudget,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['budgets']);
-      queryClient.invalidateQueries(['budget-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   useEffect(() => {

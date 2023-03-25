@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { MdNumbers, MdTextFormat } from 'react-icons/md';
 import { RiBankCard2Fill } from 'react-icons/ri';
@@ -19,6 +19,15 @@ import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
 
 const PAGE_SIZE = 5;
+
+function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.Dispatch<unknown>) {
+  return () => {
+    setError(null);
+    queryClient.invalidateQueries(['accounts']);
+    queryClient.invalidateQueries(['transactions']);
+    queryClient.invalidateQueries(['account-counts']);
+  };
+}
 
 export default function Accounts() {
   const { setError } = useSetError();
@@ -42,30 +51,17 @@ export default function Accounts() {
 
   const addAccountMutation = useMutation({
     mutationFn: addAccount,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['account-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const deleteAccountMutation = useMutation({
     mutationFn: deleteAccount,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['transactions']);
-      queryClient.invalidateQueries(['account-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   const updateAccountMutation = useMutation({
     mutationFn: updateAccount,
-    onSuccess: () => {
-      setError(null);
-      queryClient.invalidateQueries(['accounts']);
-      queryClient.invalidateQueries(['account-counts']);
-    },
+    onSuccess: invalidateQueriesOnMutating(queryClient, setError),
   });
 
   useEffect(() => {
