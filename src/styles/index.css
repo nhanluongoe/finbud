@@ -54,6 +54,6 @@
   }
 
   .divider {
-    @apply border-b-2 border-gray-100 my-8;
+    @apply border-b border-gray-300 my-8;
   }
 }

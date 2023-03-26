@@ -26,8 +26,13 @@ const commands = [
   },
   {
     title: 'Pagination',
-    usage: 'next|previous <target>',
+    usage: 'next | previous <target>',
     examples: ['next account', 'previous account', 'n a', 'p a'],
+  },
+  {
+    title: 'Logout',
+    usage: 'logout | lo',
+    examples: ['logout', 'lo'],
   },
 ];
 
@@ -76,11 +81,11 @@ export default function Help() {
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <div className='bg-canvas-50 w-full md:w-3/4 3xl:w-1/2 h-3/4 p-12 rounded-xl text-gray-700 overflow-auto'>
-        <p className='text-right text-sm'>
+      <div className='bg-canvas-50 w-full md:w-3/4 3xl:w-1/2 h-3/4 p-8 rounded-xl text-gray-700 overflow-auto text-sm'>
+        <p className='text-right text-xs'>
           Press <span className='key'>Esc</span> to close
         </p>
-        <h1 className='uppercase text-center text-3xl mb-16'>Quick Help</h1>
+        <h1 className='uppercase text-center text-2xl mb-16'>Quick Help</h1>
         <div className='grid grid-cols-1 xl:grid-cols-2 gap-x-5 gap-y-8'>
           {commands.map((command, index) => (
             <CommandSection key={index} {...command} />
