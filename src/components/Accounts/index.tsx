@@ -155,43 +155,43 @@ export default function Accounts() {
         </span>
         <h1 className='m-0 font-bold'>Accounts</h1>
       </div>
-      {isLoading ? (
-        <Wobbling />
-      ) : !data || data.length === 0 ? (
-        <Empty />
-      ) : (
-        <>
-          <table>
-            <thead>
-              <tr>
-                <th className='pl-3 rounded-l-md'></th>
-                <th>
-                  <div className='flex items-center justify-center'>
-                    <MdTextFormat className='mr-1' />
-                    <span>Name</span>
-                  </div>
-                </th>
-                <th className='pr-3 rounded-r-md'>
-                  <div className='flex items-center justify-center'>
-                    <MdNumbers className='mr-1' />
-                    <span>Balance</span>
-                  </div>
-                </th>
+      <>
+        <table>
+          <thead>
+            <tr>
+              <th className='pl-3 rounded-l-md'></th>
+              <th>
+                <div className='flex items-center justify-center'>
+                  <MdTextFormat className='mr-1' />
+                  <span>Name</span>
+                </div>
+              </th>
+              <th className='pr-3 rounded-r-md'>
+                <div className='flex items-center justify-center'>
+                  <MdNumbers className='mr-1' />
+                  <span>Balance</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.map((account) => (
+              <tr key={account.id}>
+                <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
+                <td>{account.name}</td>
+                <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {data.map((account) => (
-                <tr key={account.id}>
-                  <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
-                  <td>{account.name}</td>
-                  <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
+        {isLoading ? (
+          <Wobbling />
+        ) : !data || data.length === 0 ? (
+          <Empty />
+        ) : (
           <Pagination page={page} totalPages={totalPages} className='justify-end' />
-        </>
-      )}
+        )}
+      </>
     </section>
   );
 }

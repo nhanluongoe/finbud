@@ -184,50 +184,50 @@ export default function Budgets() {
         </div>
         <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
-      {isLoading ? (
-        <Wobbling />
-      ) : !budgets || budgets.length === 0 ? (
-        <Empty />
-      ) : (
-        <>
-          <table>
-            <thead>
-              <tr>
-                <th className='pl-3 rounded-l-md'></th>
-                <th>
-                  <div className='flex items-center justify-center'>
-                    <MdTextFormat className='mr-1' />
-                    <span>Name</span>
-                  </div>
-                </th>
-                <th className='pr-3 rounded-r-md'>
-                  <div className='flex items-center justify-center'>
-                    <MdNumbers className='mr-1' />
-                    <span>Amount</span>
-                  </div>
-                </th>
-                <th className='pr-3 rounded-r-md'>
-                  <div className='flex items-center justify-center'>
-                    <MdNumbers className='mr-1' />
-                    <span>Remaining</span>
-                  </div>
-                </th>
+      <>
+        <table>
+          <thead>
+            <tr>
+              <th className='pl-3 rounded-l-md'></th>
+              <th>
+                <div className='flex items-center justify-center'>
+                  <MdTextFormat className='mr-1' />
+                  <span>Name</span>
+                </div>
+              </th>
+              <th className='pr-3 rounded-r-md'>
+                <div className='flex items-center justify-center'>
+                  <MdNumbers className='mr-1' />
+                  <span>Amount</span>
+                </div>
+              </th>
+              <th className='pr-3 rounded-r-md'>
+                <div className='flex items-center justify-center'>
+                  <MdNumbers className='mr-1' />
+                  <span>Remaining</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {budgets?.map((budget) => (
+              <tr key={budget.id}>
+                <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
+                <td>{budget.name}</td>
+                <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
+                <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {budgets.map((budget) => (
-                <tr key={budget.id}>
-                  <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
-                  <td>{budget.name}</td>
-                  <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
-                  <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            ))}
+          </tbody>
+        </table>
+        {isLoading ? (
+          <Wobbling />
+        ) : !budgets || budgets.length === 0 ? (
+          <Empty />
+        ) : (
           <Pagination page={page} totalPages={totalPages} className='justify-end' />
-        </>
-      )}
+        )}
+      </>
     </section>
   );
 }
