@@ -1,7 +1,9 @@
 import useProfile from '../../hooks/useProfile';
 
 export default function Header() {
-  const { firstName, lastName } = useProfile();
+  const { firstName, lastName, email } = useProfile();
+
+  const userName = `${firstName} ${lastName}`;
 
   return (
     <header className='mb-6'>
@@ -10,7 +12,7 @@ export default function Header() {
           <img src='/finbud.png' alt='logo' />
           <p className='font-bold text-green-600'>Finbud</p>
         </section>
-        <p className='text-green-600'>{` 👋 ${firstName} ${lastName}`}</p>
+        <p className='text-green-600'>{` 👋 ${userName != ' ' ? userName : email}`}</p>
       </div>
     </header>
   );

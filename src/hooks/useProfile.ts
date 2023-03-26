@@ -1,3 +1,4 @@
+import { useSession } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../lib/initSupabase';
 
@@ -17,6 +18,11 @@ export default function useProfile() {
     staleTime: Infinity,
   });
 
+  const session = useSession();
+  const email = session?.user.email;
+
+  console.log(session);
+
   const profile = data?.[0];
   const firstName = profile?.first_name ?? '';
   const lastName = profile?.last_name ?? '';
@@ -24,5 +30,6 @@ export default function useProfile() {
   return {
     firstName,
     lastName,
+    email,
   };
 }
