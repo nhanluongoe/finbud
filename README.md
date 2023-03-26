@@ -75,10 +75,10 @@ Finbud is a simple finance management web application that help you manage your 
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+- Node >= 16.x.x
 
 ```sh
-npm install npm@latest -g
+npm install yarn -g
 ```
 
 ### Installation
@@ -87,7 +87,7 @@ npm install npm@latest -g
    ```sh
    git clone https://github.com/nhanluongoe/finbud.git
    ```
-2. Install NPM packages
+2. Install packages
    ```sh
    yarn install
    ```
@@ -99,7 +99,7 @@ npm install npm@latest -g
     echo VITE_SUPABASE_ANON_KEY=<your-key> >> .env
    ```
 
-4. Run all sql files on the Supabase SQL Editor to create tables
+4. Run all sql files `/src/databse` on the Supabase SQL Editor to create tables
 
 <!-- USAGE EXAMPLES -->
 
@@ -107,8 +107,8 @@ npm install npm@latest -g
 
 Run locally
 
-```
-  yarn dev
+```sh
+yarn dev
 ```
 
 <!-- ROADMAP -->
