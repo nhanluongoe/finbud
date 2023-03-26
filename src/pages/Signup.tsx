@@ -24,8 +24,6 @@ export default function Signup() {
     const password = e.currentTarget.password.value;
     const confirmPassword = e.currentTarget['confirm-password'].value;
 
-    console.log(email, password, confirmPassword);
-
     if (!email || !password || !confirmPassword) {
       setError('Please fill all fields!');
       return;

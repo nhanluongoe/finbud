@@ -5,6 +5,7 @@ import { RiBankCard2Fill } from 'react-icons/ri';
 
 import { useCommand } from '../../context/CommandContext';
 import { useSetError } from '../../context/ErrorContext';
+import { useSetTargetMap, useTargetMap } from '../../context/TargetMapContext';
 import {
   addAccount,
   deleteAccount,
@@ -14,6 +15,7 @@ import {
   updateAccount,
   parseParams,
 } from '../../helper';
+import { mapId, retrieveId } from '../../helper/targetMap';
 import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
 import Pagination from '../Pagination';
@@ -32,6 +34,8 @@ function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.D
 export default function Accounts() {
   const { setError } = useSetError();
   const command = useCommand();
+  const { setTargetMap } = useSetTargetMap();
+  const { targetMap } = useTargetMap();
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(0);
@@ -40,6 +44,18 @@ export default function Accounts() {
     queryKey: ['accounts', page],
     queryFn: () => fetchAccounts(page, PAGE_SIZE),
     select: (data) => data.data,
+    onSuccess: (data) => {
+      if (!data) return;
+
+      setTargetMap((prevMap) => {
+        const newMap = new Map(prevMap);
+        data.forEach((account) => {
+          newMap.set(account.id, mapId(account.id));
+        });
+
+        return newMap;
+      });
+    },
   });
 
   const { data: accountCounts } = useQuery({
@@ -65,9 +81,9 @@ export default function Accounts() {
   });
 
   useEffect(() => {
-    const inputSplits = command.toLowerCase().split(' ');
-    const action = inputSplits[0];
-    const target = inputSplits[1];
+    const inputSplits = command.split(' ');
+    const action = inputSplits[0]?.toLowerCase();
+    const target = inputSplits[1]?.toLowerCase();
 
     function handleNavigation(direction: 'next' | 'previous') {
       if (target !== 'a' && target !== 'account') {
@@ -98,7 +114,11 @@ export default function Accounts() {
     }
 
     function handleDelete() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 'a' && target !== 'account') {
         return;
@@ -108,8 +128,12 @@ export default function Accounts() {
     }
 
     function handleUpdate() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
       const params = inputSplits.slice(3).join(' ');
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 'a' && target !== 'account') {
         return;
@@ -177,7 +201,9 @@ export default function Accounts() {
           <tbody>
             {data?.map((account) => (
               <tr key={account.id}>
-                <td className='pl-3 text-gray-400 text-left text-sm'>{account.id}</td>
+                <td className='pl-3 text-gray-400 text-left text-sm'>
+                  {targetMap.get(account.id)}
+                </td>
                 <td>{account.name}</td>
                 <td className='pr-3 text-right'>{toCurrency(account.balance ?? 0)}</td>
               </tr>

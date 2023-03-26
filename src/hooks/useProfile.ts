@@ -21,8 +21,6 @@ export default function useProfile() {
   const session = useSession();
   const email = session?.user.email;
 
-  console.log(session);
-
   const profile = data?.[0];
   const firstName = profile?.first_name ?? '';
   const lastName = profile?.last_name ?? '';

@@ -20,6 +20,8 @@ import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
 import Empty from '../Empty';
 import { Wobbling } from '../LoadingIndicator';
+import { useSetTargetMap, useTargetMap } from '../../context/TargetMapContext';
+import { mapId, retrieveId } from '../../helper/targetMap';
 
 const PAGE_SIZE = 20;
 
@@ -36,6 +38,8 @@ function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.D
 export default function Transactions() {
   const { setError } = useSetError();
   const command = useCommand();
+  const { setTargetMap } = useSetTargetMap();
+  const { targetMap } = useTargetMap();
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(0);
@@ -45,6 +49,18 @@ export default function Transactions() {
     queryKey: ['transactions', page, date.month, date.year],
     queryFn: () => fetchTransactions(page, PAGE_SIZE, date.month, date.year),
     select: (res) => res.data,
+    onSuccess: (data) => {
+      if (!data) return;
+
+      setTargetMap((prevMap) => {
+        const newMap = new Map(prevMap);
+        data.forEach((account) => {
+          newMap.set(account.id, mapId(account.id));
+        });
+
+        return newMap;
+      });
+    },
   });
 
   const { data: transactionCounts } = useQuery({
@@ -69,9 +85,9 @@ export default function Transactions() {
   });
 
   useEffect(() => {
-    const inputSplits = command.toLowerCase().split(' ');
-    const action = inputSplits[0];
-    const target = inputSplits[1];
+    const inputSplits = command.split(' ');
+    const action = inputSplits[0]?.toLowerCase();
+    const target = inputSplits[1]?.toLowerCase();
 
     function handleFilter() {
       if (target !== 't' && target !== 'transaction') {
@@ -149,18 +165,25 @@ export default function Transactions() {
     }
 
     function handleDelete() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 't' && target !== 'transaction') {
         return;
       }
-
-      deleteTransactionMutation.mutate(+targetId);
+      deleteTransactionMutation.mutate(targetId);
     }
 
     function handleUpdate() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
       const params = inputSplits.slice(3).join(' ');
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 't' && target !== 'transaction') {
         return;
@@ -172,7 +195,7 @@ export default function Transactions() {
       const _amount = amount ? +amount : null;
       const _budget = budget ? +budget : null;
       updateTransactionMutation.mutate({
-        id: +targetId,
+        id: targetId,
         name,
         sender_id: _from,
         receiver_id: _to,
@@ -269,7 +292,9 @@ export default function Transactions() {
           <tbody>
             {data?.map((transaction) => (
               <tr key={transaction.id}>
-                <td className='pl-3 text-gray-400 text-left text-sm'>{transaction.id}</td>
+                <td className='pl-3 text-gray-400 text-left text-sm'>
+                  {targetMap.get(transaction.id)}
+                </td>
                 <td>{transaction.name}</td>
                 <td>{transaction.sender_name}</td>
                 <td>{transaction.receiver_name}</td>

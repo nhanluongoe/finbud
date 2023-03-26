@@ -19,6 +19,8 @@ import useFilter from '../../hooks/useFilter';
 import Filter from '../Filter';
 import { Wobbling } from '../LoadingIndicator';
 import Empty from '../Empty';
+import { useSetTargetMap, useTargetMap } from '../../context/TargetMapContext';
+import { mapId, retrieveId } from '../../helper/targetMap';
 
 const PAGE_SIZE = 10;
 
@@ -33,6 +35,8 @@ function invalidateQueriesOnMutating(queryClient: QueryClient, setError: React.D
 export default function Budgets() {
   const { setError } = useSetError();
   const command = useCommand();
+  const { setTargetMap } = useSetTargetMap();
+  const { targetMap } = useTargetMap();
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(0);
@@ -42,6 +46,18 @@ export default function Budgets() {
     queryKey: ['budgets', page, date.month, date.year],
     queryFn: () => fetchBudgets(page, PAGE_SIZE, date.month, date.year),
     select: (data) => data.data,
+    onSuccess: (data) => {
+      if (!data) return;
+
+      setTargetMap((prevMap) => {
+        const newMap = new Map(prevMap);
+        data.forEach((account) => {
+          newMap.set(account.id, mapId(account.id));
+        });
+
+        return newMap;
+      });
+    },
   });
 
   const { data: budgetCounts } = useQuery({
@@ -67,9 +83,9 @@ export default function Budgets() {
   });
 
   useEffect(() => {
-    const inputSplits = command.toLowerCase().split(' ');
-    const action = inputSplits[0];
-    const target = inputSplits[1];
+    const inputSplits = command.split(' ');
+    const action = inputSplits[0]?.toLowerCase();
+    const target = inputSplits[1]?.toLowerCase();
 
     function handleFilter() {
       if (target !== 'b' && target !== 'budget') {
@@ -122,7 +138,11 @@ export default function Budgets() {
     }
 
     function handleDelete() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 'b' && target !== 'budget') {
         return;
@@ -132,8 +152,12 @@ export default function Budgets() {
     }
 
     function handleUpdate() {
-      const targetId = inputSplits[2];
+      const targetId = retrieveId(inputSplits[2], targetMap);
       const params = inputSplits.slice(3).join(' ');
+
+      if (!targetId) {
+        return;
+      }
 
       if (target !== 'b' && target !== 'budget') {
         return;
@@ -212,7 +236,7 @@ export default function Budgets() {
           <tbody>
             {budgets?.map((budget) => (
               <tr key={budget.id}>
-                <td className='pl-3 text-gray-400 text-left text-sm'>{budget.id}</td>
+                <td className='pl-3 text-gray-400 text-left text-sm'>{targetMap.get(budget.id)}</td>
                 <td>{budget.name}</td>
                 <td className='text-right'>{toCurrency(budget.amount ?? 0)}</td>
                 <td className='pr-3 text-right'>{toCurrency(budget.remaining ?? 0)}</td>
