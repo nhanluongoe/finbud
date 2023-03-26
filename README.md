@@ -64,14 +64,10 @@
 
 Finbud is a simple finance management web application that help you manage your finance without leaving the keyboard by using command inspired by Vim text-editor.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Built With
 
 - [![React][React.js]][React-url]
 - [![Supabase][Supabse.com]][Supabse-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
@@ -93,16 +89,15 @@ This is an example of how to list things you need to use the software and how to
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/nhanluongoe/finbud.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    yarn install
    ```
-4. Create and enter your Supabse Keys in `.env`
+3. Create and enter your Supabse Keys in `.env`
 
    ```sh
     touch .env
@@ -110,9 +105,7 @@ _Below is an example of how you can instruct your audience on installing and set
     echo VITE_SUPABASE_ANON_KEY=<your-key> >> .env
    ```
 
-5. Run all sql files on the Supabase SQL Editor to create tables
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+4. Run all sql files on the Supabase SQL Editor to create tables
 
 <!-- USAGE EXAMPLES -->
 
@@ -124,16 +117,12 @@ Run locally
   yarn dev
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ROADMAP -->
 
 ## Roadmap
 
 - [ ] Dark theme
 - [ ] Charts
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 
@@ -144,23 +133,17 @@ Contributions are what make the open source community such an amazing place to l
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- LICENSE -->
 
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- CONTACT -->
 
 ## Contact
 
 Nhan Luong - nhanlt18@gmail.com
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
 
@@ -170,8 +153,6 @@ Use this space to list resources you find helpful and would like to give credit 
 
 - [Img Shields](https://shields.io)
 - [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
