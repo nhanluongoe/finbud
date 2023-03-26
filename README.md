@@ -83,8 +83,6 @@ npm install npm@latest -g
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
 1. Clone the repo
    ```sh
    git clone https://github.com/nhanluongoe/finbud.git
@@ -144,8 +142,6 @@ Nhan Luong - nhanlt18@gmail.com
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
 - [Img Shields](https://shields.io)
 - [React Icons](https://react-icons.github.io/react-icons/search)
