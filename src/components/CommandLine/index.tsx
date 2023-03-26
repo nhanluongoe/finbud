@@ -158,7 +158,7 @@ export default function CommandLine() {
     return (
       <section className='fixed bottom-5 right-5'>
         <p className='text-gray-500 border border-gray-600 px-2 py-1.5 rounded-lg'>
-          Press <span className='backtick'>i</span> to open the command input
+          Press <span className='backtick'>i</span> to insert a command
         </p>
       </section>
     );
