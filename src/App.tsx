@@ -34,11 +34,11 @@ function App() {
       <section>
         <Transactions />
       </section>
-      <Help />
       <CommandHistoryProvider>
         <CommandLine />
       </CommandHistoryProvider>
       <CommandError />
+      <Help />
     </Layout>
   );
 }

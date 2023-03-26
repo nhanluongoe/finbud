@@ -46,7 +46,7 @@
   }
 
   .backtick {
-    @apply bg-gray-100 text-amber-700 rounded-md p-1 border border-amber-700 font-mono w-fit m-1;
+    @apply bg-gray-100 text-orange-700 rounded-md p-1 border border-orange-700 font-mono w-fit m-1;
   }
 
   .key {

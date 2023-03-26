@@ -155,7 +155,13 @@ export default function CommandLine() {
   useEventListener('keyup', retrieveHistory);
 
   if (!visible) {
-    return null;
+    return (
+      <section className='fixed bottom-5 right-5'>
+        <p className='text-gray-500 border border-gray-600 px-2 py-1.5 rounded-lg'>
+          Press <span className='backtick'>i</span> to open the command input
+        </p>
+      </section>
+    );
   }
 
   return (
@@ -163,7 +169,8 @@ export default function CommandLine() {
       <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
         <form onSubmit={handleSubmit} className='w-full'>
           <p className='text-gray-500 mb-1'>
-            Type &quot;help&quot; to show a quick introduction about the commands!
+            Type <span className='backtick'>help</span> to show a quick introduction about the
+            commands!
           </p>
           <div className='flex items-center w-full  rounded-md border-green-600 border py-1 px-2 bg-canvas-50'>
             <span className='text-green-600'>
