@@ -185,7 +185,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [issues-shield]: https://img.shields.io/github/issues/nhanluongoe/finbud.svg?style=for-the-badge
 [issues-url]: https://github.com/nhanluongoe/finbud/issues
 [license-shield]: https://img.shields.io/github/license/nhanluongoe/finbud.svg?style=for-the-badge
-[license-url]: https://github.com/nhanluongoe/finbud/blob/master/LICENSE.txt
+[license-url]: https://github.com/nhanluongoe/finbud/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/nhanluongoe
 [product-screenshot]: images/screenshot.png
