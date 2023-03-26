@@ -130,27 +130,13 @@ export default function Transactions() {
         return;
       }
 
-      const {
-        name,
-        n,
-        from,
-        f,
-        to,
-        t,
-        amount,
-        a,
-        date = new Date().toISOString(),
-        d,
-        budget,
-        b,
-        note,
-        no,
-      } = parseParams(params);
+      const { name, n, from, f, to, t, amount, a, date, d, budget, b, note, no } =
+        parseParams(params);
       const _name = name ?? n;
       const _from = from ?? f;
       const _to = to ?? t;
       const _amount = amount ?? a ?? 0;
-      const _date = date ?? d;
+      const _date = date ?? d ?? new Date().toISOString();
       const _budget = budget ?? b;
       const _note = note ?? no;
       addTransactionMutation.mutate({
@@ -191,26 +177,36 @@ export default function Transactions() {
 
       const {
         name,
+        n,
         from,
+        f,
         to,
+        t,
         amount,
+        a,
         budget,
+        b,
         note,
+        no,
         date = new Date().toISOString(),
+        d,
       } = parseParams(params);
-      const _from = from ? +from : null;
-      const _to = to ? +to : null;
-      const _amount = amount ? +amount : null;
-      const _budget = budget ? +budget : null;
+      const _name = name ?? n;
+      const _from = from ?? f;
+      const _to = to ?? t;
+      const _amount = amount ?? a;
+      const _budget = budget ?? b;
+      const _note = note ?? no;
+      const _date = date ?? d ?? new Date().toISOString();
       updateTransactionMutation.mutate({
         id: targetId,
-        name,
-        sender_id: _from,
-        receiver_id: _to,
-        amount: _amount,
-        budget_id: _budget,
-        note,
-        created_at: date.toString(),
+        name: _name,
+        sender_id: _from ? +_from : null,
+        receiver_id: _to ? +_to : null,
+        amount: _amount ? +_amount : null,
+        budget_id: _budget ? +_budget : null,
+        note: _note,
+        created_at: _date,
       });
     }
 
