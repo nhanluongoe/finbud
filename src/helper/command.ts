@@ -16,7 +16,7 @@ const validTargets = ['account', 'a', 'transaction', 't', 'budget', 'b'];
 export function isCommandValid(command: string): boolean {
   const [action, target] = command.split(' ');
 
-  if (otherActions.includes(action)) {
+  if ([...otherActions, ...authActions].includes(action)) {
     return true;
   }
 
