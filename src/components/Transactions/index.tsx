@@ -189,7 +189,15 @@ export default function Transactions() {
         return;
       }
 
-      const { name, from, to, amount, budget, note, date = new Date() } = parseParams(params);
+      const {
+        name,
+        from,
+        to,
+        amount,
+        budget,
+        note,
+        date = new Date().toISOString(),
+      } = parseParams(params);
       const _from = from ? +from : null;
       const _to = to ? +to : null;
       const _amount = amount ? +amount : null;
