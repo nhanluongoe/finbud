@@ -23,7 +23,7 @@ export function mapId(id: number) {
 export function retrieveId(mappedId: string, map: Map<number, string>) {
   const keys = Array.from(map.keys());
 
-  const key = keys.find((key) => map.get(key) === mappedId);
+  const key = keys.find((key) => map.get(key) === mappedId.trim());
 
   return key;
 }
