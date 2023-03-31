@@ -139,9 +139,9 @@ export default function Transactions() {
       const _date = date ?? d ?? new Date().toISOString();
       const _budget = budget ?? b;
       const _note = note ?? no;
+
       addTransactionMutation.mutate({
         name: _name,
-        // sender_id: _from ? +_from : null,
         sender_id: _from ? retrieveId(_from, targetMap) : null,
         receiver_id: _to ? retrieveId(_to, targetMap) : null,
         amount: +_amount,
