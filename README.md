@@ -110,13 +110,11 @@ npm install yarn -g
 
 <!-- USAGE EXAMPLES -->
 
-## Usage
+## Features
 
-Run locally
-
-```sh
-yarn dev
-```
+- Create/Update/Delete
+- Pagination
+- Filter
 
 <!-- ROADMAP -->
 
