@@ -141,10 +141,11 @@ export default function Transactions() {
       const _note = note ?? no;
       addTransactionMutation.mutate({
         name: _name,
-        sender_id: _from ? +_from : null,
-        receiver_id: _to ? +_to : null,
+        // sender_id: _from ? +_from : null,
+        sender_id: _from ? retrieveId(_from, targetMap) : null,
+        receiver_id: _to ? retrieveId(_to, targetMap) : null,
         amount: +_amount,
-        budget_id: _budget ? +_budget : null,
+        budget_id: _budget ? retrieveId(_budget, targetMap) : null,
         note: _note,
         created_at: _date,
       });
