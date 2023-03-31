@@ -178,6 +178,7 @@ export default function Accounts() {
           </i>
         </span>
         <h1 className='m-0 font-bold'>Accounts</h1>
+        <span className='text-hint'>a</span>
       </div>
       <>
         <table>
@@ -188,12 +189,14 @@ export default function Accounts() {
                 <div className='flex items-center justify-center'>
                   <MdTextFormat className='mr-1' />
                   <span>Name</span>
+                  <span className='text-hint'>n</span>
                 </div>
               </th>
               <th className='pr-3 rounded-r-md'>
                 <div className='flex items-center justify-center'>
                   <MdNumbers className='mr-1' />
                   <span>Balance</span>
+                  <span className='text-hint'>b</span>
                 </div>
               </th>
             </tr>

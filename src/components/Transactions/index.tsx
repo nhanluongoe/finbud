@@ -242,6 +242,7 @@ export default function Transactions() {
             </i>
           </span>
           <h1 className='m-0 font-bold'>Transactions</h1>
+          <span className='text-hint'>t</span>
         </div>
         <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
@@ -254,41 +255,48 @@ export default function Transactions() {
                 <div className='flex items-center justify-center'>
                   <MdTextFormat className='mr-1' />
                   <span>Name</span>
+                  <span className='text-hint'>n</span>
                 </div>
               </th>
               <th>
                 <div className='flex items-center justify-center'>
                   <BsArrowDownLeft className='mr-1' />
                   <span>From</span>
+                  <span className='text-hint'>f</span>
                 </div>
               </th>
               <th className='flex items-center justify-center'>
                 <div className='flex items-center justify-center'>
                   <BsArrowUpRight className='mr-1' /> <span>To</span>
+                  <span className='text-hint'>t</span>
                 </div>
               </th>
               <th>
                 <div className='flex items-center justify-center'>
                   <MdNumbers className='mr-1' />
                   <span>Amount</span>
+                  <span className='text-hint'>a</span>
                 </div>
               </th>
               <th>
                 <div className='flex items-center justify-center'>
                   <MdTextFormat className='mr-1' />
                   <span>Budget</span>
+                  <span className='text-hint'>b</span>
                 </div>
               </th>
               <th>
                 <div className='flex items-center justify-center'>
                   <BiNote className='mr-1' />
                   <span>Note</span>
+                  <span className='text-hint'>no</span>
                 </div>
               </th>
               <th className='pr-3 rounded-r-md'>
                 <div className='flex items-center justify-center'>
                   <MdOutlineDateRange className='mr-1' />
                   <span>Date</span>
+                  <span className='text-hint'>d</span>
                 </div>
               </th>
             </tr>

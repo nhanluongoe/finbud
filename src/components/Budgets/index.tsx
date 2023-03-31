@@ -205,6 +205,7 @@ export default function Budgets() {
             </i>
           </span>
           <h1 className='m-0 font-bold'>Budgets</h1>
+          <span className='text-hint'>b</span>
         </div>
         <Filter date={date} className='flex-grow-0 ml-auto' />
       </div>
@@ -217,12 +218,14 @@ export default function Budgets() {
                 <div className='flex items-center justify-center'>
                   <MdTextFormat className='mr-1' />
                   <span>Name</span>
+                  <span className='text-hint'>n</span>
                 </div>
               </th>
               <th className='pr-3 rounded-r-md'>
                 <div className='flex items-center justify-center'>
                   <MdNumbers className='mr-1' />
                   <span>Amount</span>
+                  <span className='text-hint'>a</span>
                 </div>
               </th>
               <th className='pr-3 rounded-r-md'>

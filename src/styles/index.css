@@ -56,4 +56,9 @@
   .divider {
     @apply border-b border-gray-300 my-8;
   }
+
+  .text-hint {
+    @apply text-orange-700 mx-1 lowercase font-bold;
+    font-size: 0.6rem;
+  }
 }

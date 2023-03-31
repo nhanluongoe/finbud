@@ -168,7 +168,7 @@ export default function CommandLine() {
     <div className='fixed block w-full h-full top-0 left-0 right-0 bottom-0'>
       <div className='flex justify-start items-end w-full h-full pb-7 px-5'>
         <form onSubmit={handleSubmit} className='w-full'>
-          <p className='text-gray-500 mb-1 text-xs'>
+          <p className='text-gray-500 mb-2 text-xs'>
             Type <span className='backtick'>help</span> to show a quick introduction about the
             commands!
           </p>
