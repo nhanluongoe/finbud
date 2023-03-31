@@ -62,7 +62,7 @@
 <!-- TODO: update later -->
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
-![](https://drive.google.com/file/d/1cxlHGC1XW4SYbv2y30doKtNFuaOJ_kH0/view?usp=share_link)
+![](/demo/account.mkv)
 
 Finbud is a simple finance management web application that help you manage your finance without leaving the keyboard by using command inspired by Vim text-editor.
 
