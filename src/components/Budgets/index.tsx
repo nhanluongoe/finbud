@@ -51,8 +51,8 @@ export default function Budgets() {
 
       setTargetMap((prevMap) => {
         const newMap = new Map(prevMap);
-        data.forEach((account) => {
-          newMap.set(account.id, mapId(account.id));
+        data.forEach((budget) => {
+          newMap.set(budget.id, mapId(budget.id));
         });
 
         return newMap;

@@ -54,8 +54,8 @@ export default function Transactions() {
 
       setTargetMap((prevMap) => {
         const newMap = new Map(prevMap);
-        data.forEach((account) => {
-          newMap.set(account.id, mapId(account.id));
+        data.forEach((transaction) => {
+          newMap.set(transaction.id, mapId(transaction.id));
         });
 
         return newMap;
